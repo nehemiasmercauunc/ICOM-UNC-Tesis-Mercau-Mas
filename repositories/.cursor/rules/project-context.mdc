@@ -1,0 +1,36 @@
+---
+description: Project stack, repository architecture, and thesis context (Tesis Ing. Computación UNC)
+alwaysApply: true
+---
+
+# Project context
+
+## Thesis context (Tesis de Grado)
+
+- **Tipo**: Tesis de Grado para Ingeniería en Computación (UNC). El estudiante terminó la cursada y está desarrollando la tesis para recibirse.
+- **Tema**: Creación de 6 laboratorios (definidos en el documento de presentación del trabajo final).
+- **Contexto obligatorio**: Usar siempre como referencia el contenido del archivo **Solicitud-tema-PI.docx.md** en la raíz del proyecto para alinear redacción, objetivos y marco del trabajo.
+
+### Entregables por laboratorio
+
+Para cada Lab generar:
+
+1. **Informe final del lab**: tecnologías usadas, descripción de cada tarea realizada, explicación y justificación de las decisiones, marco teórico de los conceptos cloud utilizados.
+2. **Guía y consignas del lab**: guía para los alumnos y consignas que deben cumplir.
+3. **README de documentación**: introducción a los temas del lab (para doc y alumnos).
+
+El objetivo es documentar todo para poder generar el informe final por laboratorio y, luego, el informe del trabajo final (documento de tesis).
+
+---
+
+## Tech stack
+
+- **Backend**: .NET solution with Web (API), Business (services), and Data (repositories) projects. REST API.
+- **Frontend**: React 18, Vite 5, MUI 5, React Router.
+
+## Repository structure
+
+- `backend/device-manager-api/` — .NET Device Manager API (solution: Web, Business, Data). Contains `src/`, `docker-config/`, `.github/workflows/`.
+- `frontend/device-manager-app/` — React Device Manager app (Vite, MUI). Contains app source and `docker-config/`, `.github/workflows/`.
+- `kube/` — Kubernetes manifests (e.g. `my-nginx`).
+- `gemini/` — Optional/gemini-related copy of frontend or other assets.
