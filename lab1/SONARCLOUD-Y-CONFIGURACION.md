@@ -34,6 +34,21 @@ En **cada** repo (backend y frontend):
    - `SONAR_ORGANIZATION`: la **Organization key** de SonarCloud (ej. `tu-usuario-github`).
    - `SONAR_PROJECT_KEY`: el **Project key** del proyecto de ese repo en SonarCloud (ej. `tu-usuario-github_device-manager-api`).
 
+### 1.4 Análisis automático vs CI (GitHub Actions)
+
+Si en SonarCloud tenés activado **Automatic Analysis** para el repositorio y además corrés el scanner desde **GitHub Actions**, el análisis falla con:
+
+`You are running CI analysis while Automatic Analysis is enabled`
+
+**Solución (elegí una):**
+
+- **Recomendado para este lab:** en SonarCloud, abrí el **proyecto** → **Administration** → **Analysis Method** (o el asistente de análisis del repo) y **desactivá Automatic Analysis**, dejando solo el análisis por **CI** con el token.
+- O bien quitá el paso de Sonar del workflow y usá solo Automatic Analysis (no tendrías cobertura LCOV desde Actions salvo que la integres de otro modo).
+
+### 1.5 Frontend: inputs del action `sonarcloud-github-action@v2`
+
+En la versión actual del action, los únicos `with` válidos suelen ser `args`, `projectBaseDir` y `entryPoint`. El **project key** y la **organization** deben pasarse en `args` como `-Dsonar.projectKey=...` y `-Dsonar.organization=...` (como en el workflow del frontend), no como `with: projectKey` / `organization`.
+
 Resumen por repo:
 
 | Repo      | Secret        | Variables                          |
