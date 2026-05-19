@@ -1,0 +1,32 @@
+flowchart TB
+  IGW[Internet Gateway]
+
+  subgraph azA ["us-east-1a"]
+    pubA["Subred publica dev 10.10.1.0/24"]
+    privA["Subred privada dev 10.10.2.0/24"]
+    NAT[NAT Gateway]
+    pubA --> NAT
+  end
+
+  subgraph azB ["us-east-1b"]
+    pubB["Subred publica dev 10.10.3.0/24"]
+    privB["Subred privada dev 10.10.4.0/24"]
+  end
+
+  subgraph eksPlane ["EKS tp4-dev-eks"]
+    CP[Plan de control AWS]
+    NG[Managed node group]
+    MON[Pods monitoring]
+  end
+
+  IGW --> pubA
+  IGW --> pubB
+  NAT --> IGW
+  privA --> NAT
+  privB --> NAT
+  NG --> privA
+  NG --> privB
+  CP --> privA
+  CP --> privB
+  MON --> privA
+  MON --> privB

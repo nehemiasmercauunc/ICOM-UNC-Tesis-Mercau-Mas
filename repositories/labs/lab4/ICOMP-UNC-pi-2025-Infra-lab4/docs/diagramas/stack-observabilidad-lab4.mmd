@@ -1,0 +1,22 @@
+flowchart LR
+  subgraph cluster ["EKS - namespace monitoring"]
+    NE[node-exporter]
+    KSM[kube-state-metrics]
+    Prom[Prometheus]
+    AM[Alertmanager]
+    Graf[Grafana]
+    NE --> Prom
+    KSM --> Prom
+    Prom --> AM
+    Prom --> Graf
+  end
+
+  subgraph ops ["Operador"]
+    TF[Terraform helm_release]
+    Kubectl[kubectl port-forward]
+    Browser[Navegador]
+  end
+
+  TF -->|"instala chart"| cluster
+  Kubectl -->|"ClusterIP :3000"| Graf
+  Browser --> Kubectl
