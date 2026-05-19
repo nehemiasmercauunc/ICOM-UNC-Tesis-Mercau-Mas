@@ -1,17 +1,3 @@
-# Informe de Proyecto Integrador
-
-**Desarrollo de Laboratorios y Prácticas Iterativas e Incrementales en un Cloud Provider para potenciar la Alianza AWS-UNC y demostración de despliegues productivos reales para el alumnado**
-
-Realizado por  
-**Nehemias Joel Mercau Nievas** — Matrícula: 35638296 — [nehemias.mercau@mi.unc.edu.ar](mailto:nehemias.mercau@mi.unc.edu.ar)  
-**Sebastián Andrés Mas Casariego** — Matrícula: 40518679 — [sebastian.mas@mi.unc.edu.ar](mailto:sebastian.mas@mi.unc.edu.ar)  
-
-Para la obtención del título de Grado en **Ingeniería en Computación**
-
-Director: **Ing. Danilo Paez**
-
----
-
 ## Resumen
 
 Este Proyecto Integrador propone una secuencia de **seis laboratorios técnicos** progresivos que articulan la formación en Ingeniería de Software y Gestión de la Calidad de Software con prácticas actuales de **DevOps**, **ingeniería de infraestructura** y **operación en la nube**, en línea con la **alianza entre la Universidad Nacional de Córdoba y Amazon Web Services (AWS)**. El trabajo no se limita a describir herramientas: busca que estudiantes y docentes dispongan de una experiencia ordenada, incremental y verificable que recorra el ciclo de vida de una aplicación moderna (desde el código hasta la observabilidad y el despliegue controlado), con énfasis en **automatización**, **calidad**, **seguridad**, **observabilidad**, **trazabilidad** y **trabajo colaborativo**.
