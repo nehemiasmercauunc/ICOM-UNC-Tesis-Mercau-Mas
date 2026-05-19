@@ -2,9 +2,9 @@
 
 Este Proyecto Integrador propone una secuencia de **seis laboratorios técnicos** progresivos que articulan la formación en Ingeniería de Software y Gestión de la Calidad de Software con prácticas actuales de **DevOps**, **ingeniería de infraestructura** y **operación en la nube**, en línea con la **alianza entre la Universidad Nacional de Córdoba y Amazon Web Services (AWS)**. El trabajo no se limita a describir herramientas: busca que estudiantes y docentes dispongan de una experiencia ordenada, incremental y verificable que recorra el ciclo de vida de una aplicación moderna (desde el código hasta la observabilidad y el despliegue controlado), con énfasis en **automatización**, **calidad**, **seguridad**, **observabilidad**, **trazabilidad** y **trabajo colaborativo**.
 
-En el **Laboratorio 1** se construyen imágenes **Docker** de un backend y un frontend, se automatiza la integración continua con **GitHub Actions**, se ejecutan **pruebas automatizadas** y análisis estático con **SonarCloud**, y se publican artefactos en **Amazon ECR** con una política explícita de ramas (`develop` / `main`) y repositorios de registro diferenciados para integración y producción. El **Laboratorio 2** introduce **Kubernetes** y **Helm** para desplegar esos mismos artefactos como cargas de trabajo orquestadas, exponiendo la aplicación mediante **Services**, **NodePort** e **Ingress**, y sentando bases para el ajuste de recursos y pruebas de estrés. El **Laboratorio 3** aborda **infraestructura como código** con **Terraform** sobre AWS, contrastando aprovisionamiento manual con flujos reproducibles y estado gestionado. El **Laboratorio 4** amplía el escenario hacia **Amazon EKS** y la observabilidad con **Prometheus** y **Grafana**, integrando charts de Helm en el ciclo de IaC. El **Laboratorio 5** incorpora **feature flags** y despliegues **canary** (en la propuesta, integración con **Split.io** u herramienta equivalente), habilitando liberación gradual y rollback basado en señales de calidad. Finalmente, el **Laboratorio 6** consolida un **pipeline integral** que une construcción de imágenes, aprovisionamiento, despliegue en Kubernetes, gestión de secretos y monitoreo, enlazando prácticas de operación con **métricas DORA** y tiempos de respuesta (MTTR y afines).
+En el **Laboratorio 1** se construyen imágenes **Docker** de backend y frontend, se automatiza la **integración continua** con **GitHub Actions**, pruebas y **SonarCloud**, y se publican artefactos en **Amazon ECR** con política de ramas y repositorios diferenciados. El **Laboratorio 2** despliega la misma aplicación en **Minikube** con manifiestos y **Helm**, **Ingress**, **HPA** (metrics-server) y validación de escalado mediante **JMeter** in-cluster. El **Laboratorio 3** provisiona en **AWS** —mediante **Terraform** y **Terragrunt**— **VPC**, **ECR** y **EKS** en entornos `dev` y `prd`, con **estado remoto en S3**. El **Laboratorio 4** extiende esa base con **observabilidad** (**Prometheus**, **Grafana**) instalada como **Helm dentro de IaC** (`kube-prometheus-stack`). Los **Laboratorios 5 y 6** permanecen definidos en la Solicitud del PI (**feature flags**, canary, pipeline integral y métricas **DORA**) como trabajo futuro del material docente.
 
-Como resultado esperado, la propuesta ofrece **guías y consignas** para el aula, **informes por laboratorio** y documentación de soporte, de modo que el PI funcione como **puente verificable** entre teoría y entornos productivos realistas, sin sacrificar la seguridad ni la idoneidad pedagógica.
+Los **cuatro primeros laboratorios** cuentan con implementación de referencia, **informes finales**, guías, consignas y entregables. El PI funciona como **puente verificable** entre teoría académica y prácticas de industria en la nube, con progresión **local → AWS gestionada** y énfasis en automatización, calidad y observabilidad.
 
 **Palabras clave**: DevOps, Cloud Computing, Programming, Engineering education, Amazon Web Services, Kubernetes.
 
@@ -18,13 +18,27 @@ Como resultado esperado, la propuesta ofrece **guías y consignas** para el aula
 
 ## Índice de figuras
 
-*(Pendiente.)*
+- Figura 4.1 — Flujo Lab 1: PR, CI, publicación en ECR (§4.1.5)
+- Figura 4.2 — Secuencia jobs GitHub Actions (§4.1.5)
+- Figura 4.3 — Arquitectura Lab 2 en Minikube (§4.2.6)
+- Figura 4.4 — Progresión manifiestos → Helm → Ingress (§4.2.6)
+- Figura 4.5 — Secuencia JMeter, Service backend y HPA (§4.2.6)
+- Figuras Lab 3 — Ver `arquitectura-lab3.mmd`, `jerarquia-terragrunt.mmd`, `red-vpc-2az.mmd`, `secuencia-despliegue.mmd`, `estado-remoto-bootstrap.mmd` (§4.3.5)
+- Figuras Lab 4 — Ver `arquitectura-lab4.mmd`, `stack-observabilidad-lab4.mmd`, `jerarquia-terragrunt-lab4.mmd`, `secuencia-despliegue-lab4.mmd`, `red-vpc-eks-lab4.mmd` (§4.4.5)
+
+*(Completar numeración global al exportar a PDF e insertar capturas marcadas en informes de lab.)*
 
 ---
 
 ## Índice de tablas
 
-*(Pendiente.)*
+- Tabla 4.1 — Repositorios ECR por rama (§4.1.5)
+- Tabla 4.2 — Cuatro pruebas de escalado HPA, Lab 2 (§4.2.6)
+- Tabla 4.3 — NodePort vs Ingress, Lab 2 (§4.2.6)
+- Tabla 4.4 — Comparativa dev/prd, Lab 3 (§4.3.5)
+- Tabla 4.5 — Comparativa dev/prd, Lab 4 (§4.4.5)
+- Tabla 2.1 — Estado de avance del PI (§2.7)
+- Tabla 1.14.16 — Servicios AWS ↔ laboratorios (§1.14.16)
 
 ---
 
@@ -61,10 +75,7 @@ Como resultado esperado, la propuesta ofrece **guías y consignas** para el aula
 | SPA    | Single Page Application                                             |
 | SRE    | Site Reliability Engineering                                        |
 | YAML   | YAML Ain’t Markup Language                                          |
-| ALB    | Application Load Balancer (AWS ELB)                                 |
-| NLB    | Network Load Balancer (AWS ELB)                                     |
 | STS    | AWS Security Token Service                                          |
-| IRSA   | IAM Roles for Service Accounts (EKS)                                |
 | CNI    | Container Network Interface                                         |
 | PDB    | PodDisruptionBudget                                                 |
 | HPA    | Horizontal Pod Autoscaler                                           |
@@ -74,17 +85,13 @@ Como resultado esperado, la propuesta ofrece **guías y consignas** para el aula
 | OIDC   | OpenID Connect                                                      |
 | VPC    | Virtual Private Cloud (AWS)                                         |
 | AZ     | Availability Zone                                                   |
-| ELB    | Elastic Load Balancing (familia AWS)                                |
-| ALB    | Application Load Balancer                                           |
-| NLB    | Network Load Balancer                                               |
 | ENI    | Elastic Network Interface                                           |
 | ASG    | Auto Scaling Group                                                  |
 | TSDB   | Time Series Database (Prometheus)                                   |
 | PromQL | Prometheus Query Language                                           |
-| ACM    | AWS Certificate Manager                                             |
 | SNS    | Amazon Simple Notification Service                                  |
 | RPS    | Requests per second (peticiones por segundo)                        |
-| VU     | Virtual user (usuario virtual, en k6 / JMeter)                      |
+| VU     | Virtual user (usuario virtual, en JMeter)                           |
 | JTL    | JMeter text log (resultados de prueba)                              |
 | JMX    | Archivo de plan de prueba de JMeter                                 |
 
@@ -97,7 +104,7 @@ Como resultado esperado, la propuesta ofrece **guías y consignas** para el aula
 
 Este capítulo presenta los conceptos que permiten situar el Proyecto Integrador en el estado actual de la industria del software y de la operación de sistemas en la nube. El marco no pretende ser un manual de productos: busca ofrecer definiciones estables, relaciones entre ideas (por ejemplo, entre integración continua, registros de imágenes y orquestación) y un vocabulario común para los capítulos posteriores, donde se describirán las decisiones concretas adoptadas en cada laboratorio.
 
-La propuesta del trabajo —seis laboratorios que van desde la **containerización** y el **pipeline** hasta **observabilidad**, **feature flags** y **despliegues progresivos**— exige integrar perspectivas que tradicionalmente estaban fragmentadas: desarrollo, calidad, seguridad y operaciones. El marco recorre esas capas en un orden que sigue en lo posible la progresión pedagógica: primero flujo de código y automatización cercana al desarrollador (Git, GitHub Actions, Docker, **Amazon ECR** como primera interfaz práctica con AWS en el Laboratorio 1), luego la aplicación como API y cliente web (REST, .NET, React), después calidad y seguridad en el pipeline, seguido de **Kubernetes**, **Helm** e **infraestructura como código** (Terraform, Terragrunt). Las herramientas de observabilidad, secretos y release progresivo se desarrollan antes de cerrar el capítulo con la **sección 1.14**, dedicada de manera exclusiva y exhaustiva al **ecosistema Amazon Web Services** que el PI utiliza o utilizará (IAM, ECR en profundidad, EKS, Secrets Manager, S3, DynamoDB para estado, CloudWatch, balanceadores, STS/IRSA, etc.), admitiendo solapamiento deliberado con apartados anteriores para que el lector disponga de un capítulo de consulta único sobre AWS.
+La propuesta del trabajo —seis laboratorios que van desde la **containerización** y el **pipeline** hasta **observabilidad**, **feature flags** y **despliegues progresivos**— exige integrar perspectivas que tradicionalmente estaban fragmentadas: desarrollo, calidad, seguridad y operaciones. El marco recorre esas capas en un orden que sigue en lo posible la progresión pedagógica: primero flujo de código y automatización cercana al desarrollador (Git, GitHub Actions, Docker, **Amazon ECR** como primera interfaz práctica con AWS en el Laboratorio 1), luego la aplicación como API y cliente web (REST, .NET, React), después calidad y seguridad en el pipeline, seguido de **Kubernetes**, **Helm** e **infraestructura como código** (Terraform, Terragrunt). Las herramientas de observabilidad, secretos y release progresivo se desarrollan antes de cerrar el capítulo con la **sección 1.14**, dedicada de manera exclusiva al **ecosistema Amazon Web Services** que el PI utiliza en los **Laboratorios 1–4** (IAM, ECR, VPC, EKS, S3 para estado de Terraform, KMS donde aplica cifrado, etc.), admitiendo solapamiento deliberado con apartados anteriores para que el lector disponga de un capítulo de consulta único sobre AWS.
 
 El lector encontrará **definiciones**, pero también **criterios**: cuándo usar un tag inmutable frente a `latest`, por qué separar repositorios ECR por línea de código, cómo interpretar un gate de calidad sin convertirlo en obstáculo pedagógico. Esta combinación refleja la naturaleza dual del PI: es simultáneamente un **artefacto de ingeniería** y una **propuesta didáctica** sometida a restricciones de tiempo, costo y nivel previo del estudiante.
 
@@ -139,7 +146,7 @@ Las **reglas de protección de ramas** en GitHub (configuración del repositorio
 
 Los equipos también deben acordar si prefieren **merge commits**, **squash** o **rebase** al integrar PRs: cada opción altera el historial visible (`git log`) y la facilidad de **bisect** ante regresiones. No hay única respuesta universal; sí hay consistencia como virtud. Para proyectos estudiantiles cortos, squash con mensaje estandarizado suele simplificar la lectura posterior del historial.
 
-El archivo `.gitignore` y políticas de **Git LFS** (cuando hubiese binarios pesados) merecen mención aunque este PI trabaje principalmente con texto y Dockerfiles: son parte del **contrato** entre repositorio y pipeline —lo que no está versionado no forma parte del artefacto reproducible.
+El archivo `.gitignore` forma parte del **contrato** entre repositorio y pipeline: lo que no está versionado no forma parte del artefacto reproducible.
 
 ## 1.5 GitHub Actions y pipeline como código
 
@@ -173,8 +180,6 @@ El modelo de red por defecto en Docker expone puertos del contenedor al host (`-
 
 Además de Dockerfile, muchos proyectos usan **Compose** para levantar backend + base en desarrollo; no es requisito del pipeline del PI si cada servicio publica su propia imagen hacia ECR, pero los estudiantes pueden encontrar Compose en talleres auxiliares. La distinción importante es que **Compose orquesta contenedores en un host** para desarrollo, mientras **Kubernetes orquesta contenedores en un clúster** con semántica distinta de escalado y redes.
 
-Sobre **seguridad de cadena de suministro**, herramientas como **Trivy**, **Grype** o el escaneo integrado en registros detectan CVE en dependencias OS del contenedor. El marco del PI reconoce estos chequeos como complementarios al análisis estático de Sonar: cubren capas distintas del riesgo (dependencia vulnerable en la imagen base vs defecto lógico en el código C# o TypeScript).
-
 ## 1.7 Registro de contenedores y Amazon ECR
 
 ### 1.7.1 Rol del registro en la cadena CI/CD
@@ -183,7 +188,7 @@ Un **registro de contenedores** es el sistema de “paquetes binarios” para im
 
 *-Diagrama sugerido: flujo CI → `docker push` → registro → `kubectl`/nodo hace `pull` → container runtime desempaqueta capas → Pod en ejecución.-*
 
-En el Laboratorio 1, el registro es el **primer punto de contacto sistemático de los alumnos con AWS**: antes de desplegar clusters o redes, ya deben comprender identidad (IAM), permisos mínimos, región y el contrato “mi pipeline escribe artefactos que otro actor leerá después”. Esa intuición prepara EKS (Laboratorio 4), donde los nodos o Fargate consumen las mismas imágenes desde ECR con políticas distintas.
+En el Laboratorio 1, el registro es el **primer punto de contacto sistemático de los alumnos con AWS**: antes de desplegar clusters o redes, ya deben comprender identidad (IAM), permisos mínimos, región y el contrato “mi pipeline escribe artefactos que otro actor leerá después”. Esa intuición prepara EKS (Laboratorios 3–4), donde los nodos del clúster consumen las mismas imágenes desde ECR con políticas distintas.
 
 ### 1.7.2 Amazon ECR: propuesta de valor y componentes
 
@@ -206,7 +211,7 @@ Los permisos IAM se expresan como políticas JSON sobre acciones como `ecr:GetAu
 
 *-Diagrama sugerido: matriz “actor” (usuario IAM de CI, rol de nodo EKS) × “acción” (push vs pull) × repositorio ECR destino.-*
 
-En producción madura, el usuario IAM de larga duración se reemplaza por **OIDC**: GitHub Actions asume un **rol IAM** vía token OIDC sin almacenar `AWS_SECRET_ACCESS_KEY` en GitHub. El PI puede migrar a ese modelo cuando la cátedra lo habilite.
+En los **Laboratorios 1–4**, GitHub Actions autentica con **access keys** almacenadas en **GitHub Secrets** (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`), acotadas por políticas IAM mínimas de push a ECR.
 
 ### 1.7.4 Tags, digest, inmutabilidad y políticas de ciclo de vida
 
@@ -214,15 +219,11 @@ El **tag** es puntero mutable salvo políticas explícitas: conviene combinar **
 
 El **digest** permite auditar exactamente qué manifiesto desplegó Kubernetes (`imageID` en el Pod status). Cuando un incidente ocurre, correlacionar digest ↔ commit ↔ build CI es la trazabilidad buscada por DevOps.
 
-### 1.7.5 Escaneo de imágenes y cumplimiento
+### 1.7.5 Escaneo de imágenes
 
-**Amazon Inspector** (integración con ECR) u opciones de escaneo al push pueden reportar CVE en dependencias del sistema operativo de la imagen base. El Laboratorio 1 puede limitarse a **generar el informe**; laboratorios avanzados pueden definir **políticas de admisión** en Kubernetes (OPA/Gatekeeper, Kyverno) que rechazan pulls por severidad.
+En los **Laboratorios 3 y 4**, el módulo ECR habilita **`scan_on_push`** para análisis básico de vulnerabilidades al publicar capas. El Laboratorio 1 no exige escaneo de imagen como entregable; la calidad de código se cubre con **SonarCloud** en CI.
 
-### 1.7.6 Replicación, latencia y costos
-
-**ECR replication** permite copiar imágenes entre regiones para desastres o latencia de pull en entornos multi-región. Tiene costo de almacenamiento y transferencia; en el PI suele bastar una región (`us-east-1` en los workflows de ejemplo).
-
-### 1.7.7 Estrategia del PI: ramas y repositorios ECR
+### 1.7.6 Estrategia del PI: ramas y repositorios ECR
 
 La separación **develop vs main** se materializa con **repositorios ECR distintos** (p. ej. sufijo `-prd`), no solo tags distintos en un único repositorio. Ventajas: permisos IAM distintos (solo entorno prod puede pull del repo `-prd`), menor riesgo de promover por error una imagen experimental, claridad operativa para alumnos.
 
@@ -230,15 +231,15 @@ Cada push exitoso publica `ref_name-SHA` y `**latest`** en **ese** repositorio. 
 
 *-Diagrama sugerido: dos columnas (repo DEV / repo PRD) mostrando de qué rama Git entra cada pipeline.-*
 
-### 1.7.8 Relación ECR ↔ Kubernetes (anticipo teórico)
+### 1.7.7 Relación ECR ↔ Kubernetes (anticipo teórico)
 
-Los nodos de un clúster (Laboratorio 2 en adelante) deben poder hacer **pull** si el `imagePullSecrets` o el rol del nodo lo permiten. En **EKS**, la vía canónica es **IRSA** o permisos del worker node sobre ECR. Comprender ECR en Lab 1 evita confundir “mi imagen existe” con “el kubelet tiene derecho a descargarla”.
+Los nodos de un clúster (Laboratorio 2 en adelante) deben poder hacer **pull** si el `imagePullSecrets` o el rol del nodo lo permiten. En **Minikube (Lab 2)** se usan credenciales de registro vía secretos de Kubernetes; en **EKS (Labs 3–4)** el pull desde ECR se resuelve con permisos del **node group** sobre el repositorio. Comprender ECR en Lab 1 evita confundir “mi imagen existe” con “el kubelet tiene derecho a descargarla”.
 
 > **Nota:** Una exposición sistemática de cada servicio AWS —incluida una segunda capa de detalle sobre ECR dentro del mapa de servicios— se desarrolla en la **sección 1.14** de este mismo capítulo.
 
 ## 1.8 Puente hacia el ecosistema AWS
 
-La nube de AWS se introduce en el Laboratorio 1 principalmente a través de **ECR** e **IAM** (credenciales usadas por GitHub Actions). Las dimensiones de **regiones**, **cuentas**, **facturación**, **VPC**, **EKS**, **Secrets Manager**, **S3** para estado de Terraform, **CloudWatch**, balanceadores y federación de identidades se tratan en profundidad en la **sección 1.14 — Marco teórico consolidado de Amazon Web Services**, para no fragmentar la teoría entre este apartado y los laboratorios posteriores. El presente apartado solo recuerda tres ideas transversales:
+La nube de AWS se introduce en el Laboratorio 1 principalmente a través de **ECR** e **IAM** (credenciales usadas por GitHub Actions). Las dimensiones de **regiones**, **cuentas**, **VPC**, **EKS**, **S3** para estado de Terraform y servicios asociados a los Labs 1–4 se tratan en la **sección 1.14 — Marco teórico consolidado de Amazon Web Services**, para no fragmentar la teoría entre este apartado y los laboratorios posteriores. El presente apartado solo recuerda tres ideas transversales:
 
 1. **Modelo de responsabilidad compartida**: AWS opera la infraestructura física y los servicios gestionados; el cliente configura correctamente IAM, redes y datos —los errores de permisos en ECR son responsabilidad del diseño de políticas, no “fallos del servicio”.
 2. **Todo es API**: incluso la consola web invoca las mismas APIs; Terraform y los pipelines solo automatizan esas llamadas.
@@ -252,8 +253,6 @@ El backend del proyecto está desarrollado en **.NET** (**ASP.NET Core**) siguie
 
 El frontend es una **SPA** con **React 18**, empaquetada con **Vite** y componentes **Material UI (MUI)**. El build genera activos estáticos servidos por un contenedor liviano; las variables de entorno necesarias en tiempo de ejecución pueden inyectarse mediante scripts de entrada sin reconstruir la imagen para cada entorno.
 
-Las **pruebas de contrato** entre frontend y backend pueden formalizarse si el OpenAPI generado o mantenido por la API se valida contra los clientes; en el PI, la prioridad inicial está en pruebas automatizadas de cada lado y en la integración visual/manual coordinada, dejando espacio a **Pact** o herramientas similares como extensión opcional.
-
 En el backend, la inyección de dependencias del host **ASP.NET Core** permite sustituir implementaciones de repositorio en pruebas unitarias; en el frontend, **React Testing Library** favorece pruebas cercanas al uso real del usuario. Estos detalles refuerzan la idea de que “calidad” no es un paso final sino una propiedad que se diseña en la arquitectura.
 
 ## 1.10 Calidad y seguridad en el pipeline
@@ -263,8 +262,6 @@ La **pirámide de pruebas** sugiere muchas pruebas rápidas y aisladas en la bas
 En el backend del PI, el workflow ejecuta `dotnet test` con recolección de cobertura en formato **OpenCover** compatible con el análisis. En el frontend, se ejecuta el script de tests con cobertura (`npm run test:coverage`) generando **lcov** para integración con SonarCloud.
 
 **SonarCloud** (SaaS asociado al ecosistema SonarQube) realiza **análisis estático** de calidad y seguridad sobre el código. El backend usa **SonarScanner for .NET** entre pasos `begin`/`end` envolviendo build y tests; el frontend usa la acción oficial **SonarSource/sonarcloud-github-action**. Los tokens y claves de proyecto deben residir en **secrets** y **variables** de GitHub, no en el repositorio.
-
-**CodeQL** es otra línea de análisis de seguridad disponible en GitHub para varios lenguajes; puede incorporarse como evolución futura si el director del PI lo exige. La distinción entre **SAST** genérico y reglas específicas de flujo de datos es relevante cuando se priorizan vulnerabilidades explotables.
 
 La gestión de **secretos** en CI (GitHub Secrets para AWS y Sonar) es parte de **DevSecOps**: secretos fuera del código, rotación posible sin cambiar fuentes, y permisos mínimos en IAM.
 
@@ -291,14 +288,14 @@ Un **clúster Kubernetes** es un conjunto de máquinas (**nodos**) que ejecutan 
 
 | Entorno         | Ejemplos típicos                                               | Uso pedagógico en el PI                                                                 |
 | --------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Local ligero    | **kind**, **minikube**, **k3s/k3d**, Docker Desktop Kubernetes | Laboratorio 2 en laptops; rápido de resetear; limitado en realismo de red/LB.           |
-| Nube gestionada | **Amazon EKS**, GKE, AKS                                       | Laboratorios 4–6; integración IAM, ELB, VPC real; costo y curva de aprendizaje mayores. |
+| Local ligero    | **minikube**                                                   | Laboratorio 2 en laptops; rápido de resetear; Ingress nginx; sin balanceador cloud.     |
+| Nube gestionada | **Amazon EKS**                                                 | Laboratorios 3–4; VPC real; costo y curva de aprendizaje mayores.                       |
 | Híbrido         | Cluster on-prem + nodos cloud                                  | Fuera del alcance inicial del PI.                                                       |
 
 
 **Diferencia clave:** “Correr contenedores en la nube” puede significar **ECS**, **EC2 + Docker**, **Lambda**, etc.; **Kubernetes impone un modelo común** de Pods, Services y despliegues. La nube provee **infraestructura elástica**; Kubernetes provee **semántica de orquestación** sobre esa infraestructura.
 
-*-Diagrama sugerido: tres columnas — Máquina única con Docker; Clúster K8s local de 1 nodo; EKS multi-AZ con NLB/ALB.-*
+*-Diagrama sugerido: tres columnas — Máquina única con Docker; Clúster K8s local de 1 nodo (Minikube); EKS multi-AZ con node groups en subnets privadas.-*
 
 ### 1.11.2 Plano de control y nodos trabajadores
 
@@ -306,7 +303,7 @@ El **plano de control** conserva el estado del sistema en **etcd** (almacén cla
 
 Los **nodos worker** ejecutan **kubelet** (agente que arranca Pods hablando con el runtime), **kube-proxy** (reglas de red / iptables o IPVS hacia Services) y un **container runtime** compatible con CRI (**containerd** es el estándar actual).
 
-Si el plano de control cae en un cluster auto-gestionado, el cluster deja de reconciliar estado; en **EKS**, AWS opera el plano de control y el usuario gestiona principalmente **worker nodes / Fargate**.
+Si el plano de control cae en un cluster auto-gestionado, el cluster deja de reconciliar estado; en **EKS**, AWS opera el plano de control y el usuario gestiona **node groups** (EC2) —como en los Labs 3–4.
 
 ### 1.11.3 Pods, cargas de trabajo y estrategias de despliegue
 
@@ -338,7 +335,6 @@ Un **Service** agrupa Pods mediante **labels/selectors** y provee una IP virtual
 | ---------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------- |
 | **ClusterIP**    | VIP solo dentro del clúster                                      | Microservicios internos.                                                   |
 | **NodePort**     | Abre `30000-32767` en todos los nodos que forward-ean al Service | Laboratorios sin LB cloud; demos rápidas; expone por IP del nodo + puerto. |
-| **LoadBalancer** | Pide un balanceador externo al cloud controller                  | En AWS crea **NLB/ALB** según anotaciones; integración nativa con VPC.     |
 | **ExternalName** | CNAME DNS                                                        | Integración con servicios externos.                                        |
 
 
@@ -346,15 +342,13 @@ Un **Service** agrupa Pods mediante **labels/selectors** y provee una IP virtual
 
 ### 1.11.5 Ingress y diferencia con Service
 
-Un **Ingress** describe reglas **HTTP/HTTPS** (host, path, TLS). No hace nada solo: requiere un **Ingress Controller** (NGINX, Traefik, **AWS Load Balancer Controller** para ALB). Mientras un **Service** suele ser capa **L4** (TCP/UDP), Ingress opera **L7** (ruteo HTTP).
+Un **Ingress** describe reglas **HTTP/HTTPS** (host, path, TLS). No hace nada solo: requiere un **Ingress Controller**. En el **Laboratorio 2** se usa el addon **Ingress nginx** de Minikube con host `app.local` y rutas hacia Services **ClusterIP**. Mientras un **Service** suele ser capa **L4** (TCP/UDP), Ingress opera **L7** (ruteo HTTP).
 
-*-Arquitectura sugerida para imagen: Internet → ALB (AWS) → Ingress rules → Service ClusterIP → Pods.-*
-
-En **Amazon EKS**, el **AWS Load Balancer Controller** observa objetos Ingress y provisiona **ALB** con target groups hacia Pods (normalmente vía IP mode en VPC CNI).
+*-Arquitectura del Lab 2: cliente → Ingress nginx → Service ClusterIP → Pods.-*
 
 ### 1.11.6 Imagen de contenedor en Kubernetes y relación con ECR
 
-El campo `spec.containers[].image` referencia la misma cadena que Docker (`registry/repo:tag`). Para **ECR privado/público**, el nodo debe tener permisos IAM de **pull** o usar `**imagePullSecrets`** con credenciales generadas (`kubectl create secret docker-registry …`). En **EKS + IRSA**, los workloads pueden obtener credenciales temporales sin guardar AWS keys en el Secret de Kubernetes.
+El campo `spec.containers[].image` referencia la misma cadena que Docker (`registry/repo:tag`). Para **ECR**, el nodo debe poder hacer pull: en Lab 2 mediante `imagePullSecrets`; en EKS (Labs 3–4) mediante permisos del node group sobre el repositorio.
 
 **imagePullPolicy**:
 
@@ -368,9 +362,7 @@ El campo `spec.containers[].image` referencia la misma cadena que Docker (`regis
 
 Clases **QoS**: `Guaranteed` (requests=limits), `Burstable`, `BestEffort`. Importante al interpretar métricas bajo estrés en Laboratorio 2.
 
-**Horizontal Pod Autoscaler (HPA)** escala réplicas según CPU/memoria u órdenes externas (métricas personalizadas + Prometheus adapter). Requiere **metrics-server** instalado.
-
-**Vertical Pod Autoscaler** (opcional) sugiere requests/limits históricos.
+**Horizontal Pod Autoscaler (HPA)** escala réplicas según CPU/memoria (u otras métricas si el clúster las expone). En el **Laboratorio 2** el HPA usa **solo CPU** con **metrics-server** instalado en Minikube.
 
 ### 1.11.8 Observabilidad interna del Pod: probes
 
@@ -384,19 +376,11 @@ Mal diseñadas, las probes son causa #1 de reinicios en bucle bajo carga.
 
 **ConfigMap** para configuración no sensible (feature toggles estáticos, URLs); **Secret** para datos sensibles (base64 en etcd — **habilitar encryption at rest** en clusters serios). **RBAC** (`Roles`, `ClusterRoles`, `Bindings`) controla qué identidades pueden leer Secrets en qué namespaces —pedagógicamente crítico en equipos multi-tenant simulados.
 
-### 1.11.10 Almacenamiento: volúmenes y CSI
-
-**emptyDir** es efímero al Pod. **PVC** solicita al **StorageClass** un volumen dinámico (EBS CSI en EKS). Los **CSI drivers** estandarizan plug-ins de almacenamiento.
-
-### 1.11.11 Red avanzada y políticas
-
-**CNI** (Calico, Cilium, AWS VPC CNI en EKS) implementa redes Pod-to-Pod. **NetworkPolicy** filtra tráfico east-west (allow-list); sin políticas, muchos clusters permiten todo entre Pods —riesgo en zero-trust.
-
-### 1.11.12 Scheduling avanzado y alta disponibilidad
+### 1.11.10 Scheduling avanzado y alta disponibilidad
 
 **Taints/tolerations** reservan nodos para cargas especiales (GPU). **Affinity/anti-affinity** distribuye réplicas entre AZs. **PodDisruptionBudget** protege disponibilidad durante **drains** de nodos (kubelet evictions).
 
-### 1.11.13 Comandos y flujo operativo habitual (`kubectl`)
+### 1.11.11 Comandos y flujo operativo habitual (`kubectl`)
 
 
 | Acción             | Comando ilustrativo                                           |
@@ -411,11 +395,11 @@ Mal diseñadas, las probes son causa #1 de reinicios en bucle bajo carga.
 
 *-Diagrama sugerido: ciclo operador — edit manifest → apply → observar Deployment conditions → revisar logs si CrashLoopBackOff.-*
 
-### 1.11.14 Namespaces, etiquetas y multi-entorno
+### 1.11.12 Namespaces, etiquetas y multi-entorno
 
 Los **namespaces** segmentan recursos lógicamente (`dev`, `staging`, `prd`). Las **labels** (`app=device-manager`, `tier=frontend`) conectan Deployments con Services. Patrones **GitOps** (Flux, Argo CD) verían esta misma API —fuera del alcance inicial pero contextualizan el Laboratorio 6.
 
-### 1.11.15 Seguridad en runtime
+### 1.11.13 Seguridad en runtime
 
 **Pod Security Standards** / **PSA** (reemplazo moderno de PSP) definen perfiles **privileged**, **baseline**, **restricted**. **securityContext** permite `runAsNonRoot`, `readOnlyRootFilesystem`, `capabilities.drop: ["ALL"]`, alineado con endurecimiento de imagen Docker del Laboratorio 1.
 
@@ -450,17 +434,15 @@ Helm 3 almacena estado de release en **Secrets** del namespace (salvo configurac
 
 Un chart puede declarar **dependencies** (`charts/` subcharts); útil cuando `kube-prometheus-stack` incluye Prometheus, Grafana y operadores satélite.
 
-### 1.12.4 Hooks, tests y buenas prácticas
+### 1.12.4 Helm en el PI (Laboratorios 2, 4 y 6)
 
-**Hooks** (`pre-install`, `post-upgrade`, …) ejecutan Jobs en puntos del ciclo de vida; pueden bloquear si fallan —hay que diseñarlos idempotentes.
+En el **Laboratorio 2**, Helm se usa vía **CLI** (`helm upgrade --install`) sobre charts propios (`tp1-backend`, `tp1-frontend`) con overrides en `Helm/dev/` y `Helm/prd/`. Los manifiestos parametrizan **imagen ECR**, **réplicas**, **tipo de Service**, **Ingress** y **HPA**.
 
-**Helm tests** (`helm test`) lanzan Pods de verificación post-install —buena práctica para smoke tests automáticos.
+En el **Laboratorio 4**, el mismo concepto de chart se materializa dentro de **Terraform** mediante el recurso `helm_release` y el **provider Helm**, autenticado contra el API de EKS (data sources `aws_eks_cluster` y `aws_eks_cluster_auth`). Así el stack **kube-prometheus-stack** queda versionado junto al resto de la infraestructura y admite `plan` antes de cambiar releases. En laboratorios posteriores (propuesta Lab 6), charts de aplicación y de monitoreo pueden seguir el mismo patrón.
 
-### 1.12.5 Helm en el PI (Laboratorios 2, 4 y 6)
+Valores separados por entorno (`values-dev.yaml`, `values-prd.yaml`) evitan bifurcar plantillas.
 
-Los manifiestos del Laboratorio 2 parametrizan **imagen ECR**, **réplicas**, **Service type**, **Ingress host**. En Laboratorio 4–6, charts oficiales despliegan **Prometheus/Grafana** sobre el mismo modelo: valores separados por entorno (`values-staging.yaml`, `values-prd.yaml`) evitan bifurcar plantillas.
-
-### 1.12.6 Errores frecuentes y malentendidos (guía rápida)
+### 1.12.5 Errores frecuentes y malentendidos (guía rápida)
 
 Para orientar la tutoría en laboratorio, conviene listar confusiones recurrentes:
 
@@ -507,26 +489,33 @@ Conceptos esenciales:
 
 El archivo de estado no es solo caché: permite mapear direcciones lógicas (`aws_instance.web`) a IDs físicos (`i-0abc…`). En equipos, estado local en disco **no escala**: dos applies concurrentes pueden corromper el estado.
 
-El backend recomendado en AWS combina:
+El backend remoto en AWS, tal como se implementa en este PI, se apoya en:
 
-- **Amazon S3**: versionado opcional, cifrado SSE-S3 o SSE-KMS, políticas IAM de acceso por cuenta/rol.
-- **Amazon DynamoDB**: tabla con **locking** condicional para que solo un `apply` modifique el estado a la vez.
+- **Amazon S3**: almacenamiento del archivo `terraform.tfstate` (versionado opcional, cifrado SSE-S3 o SSE-KMS, políticas IAM por cuenta/rol).
+- **Bloqueo de concurrencia**: mecanismo que impide dos `apply` simultáneos sobre el mismo state.
 
-Configuración típica:
+En los **Laboratorios 3 y 4**, Terragrunt configura un backend **S3** con `encrypt = true` y **`use_lockfile = true`**: el lock es un **archivo nativo en el bucket** (lockfile de Terragrunt/Terraform moderno), **sin tabla DynamoDB** ni servicio adicional de bloqueo. Esa decisión reduce componentes que provisionar y mantener en cuentas de práctica docente.
+
+Configuración representativa (conceptual):
 
 ```hcl
-terraform {
-  backend "s3" {
-    bucket         = "mi-org-tf-state"
-    key            = "eks/lab4/terraform.tfstate"
-    region         = "us-east-1"
-    dynamodb_table = "terraform-locks"
-    encrypt        = true
+remote_state {
+  backend = "s3"
+  config = {
+    bucket       = "terraform-state-dev-<account-id>"
+    key          = "dev/us-east-1/vpc/terraform.tfstate"
+    region       = "us-east-1"
+    encrypt      = true
+    use_lockfile = true
   }
 }
 ```
 
-*-Imagen sugerida: consola S3 mostrando objeto `terraform.tfstate` versionado y tabla DynamoDB con partición LockID.-*
+En el **Laboratorio 4**, las keys de state llevan prefijo `lab4/` para no colisionar con el Lab 3 si comparten bucket.
+
+*-Imagen sugerida: consola S3 mostrando objetos `terraform.tfstate` versionados y, si aplica, el lockfile asociado al apply en curso.-*
+
+*Nota:* en documentación más antigua de Terraform aparece el bloqueo con **DynamoDB** (`dynamodb_table` en el backend S3). No forma parte de la implementación de este PI; se menciona solo porque el lector puede encontrarlo en tutoriales externos.
 
 ### 1.13.3 Módulos reutilizables
 
@@ -536,7 +525,7 @@ Un **módulo** es un paquete de recursos parametrizados (`modules/vpc`, `modules
 
 **Terragrunt** (HashiCorp ecosystem, proyecto separado) envuelve Terraform para:
 
-- **DRY de backends**: un `terragrunt.hcl` raíz define backend S3/Dynamo una vez; hijos heredan.
+- **DRY de backends**: un `terragrunt.hcl` raíz define backend S3 una vez; hijos heredan.
 - **Dependencias entre stacks**: `dependency "vpc" { config_path = "../vpc" }` expone outputs como inputs sin copiar manualmente.
 - **Múltiples entornos** (`dev/staging/prd`) como carpetas con `terraform.tfvars` distintos pero mismo código de módulo.
 
@@ -544,7 +533,7 @@ Flujo típico: `terragrunt run-all plan` en orden DAG de dependencias.
 
 *-Diagrama sugerido: árbol de carpetas `live/dev/us-east-1/eks` apuntando a módulos remotos `modules//eks`.-*
 
-No sustituye Terraform: genera `.terraform` y delega en binarios oficiales. En el PI puede adoptarse cuando crece el número de stacks (Laboratorio 3–6).
+No sustituye Terraform: genera `.terraform` y delega en binarios oficiales. En este PI, **Terragrunt está adoptado en los Laboratorios 3 y 4**: un `live/root.hcl` centraliza backend S3 y provider AWS; cada unidad bajo `live/<env>/us-east-1/` (vpc, ecr, eks, monitoring) mantiene state separado; bloques `dependency` propagan outputs (por ejemplo, subnets de VPC hacia EKS); `terragrunt run --all plan|apply` respeta el grafo de dependencias; el script `bin/tg` facilita bootstrap del bucket con `TG_BACKEND_BOOTSTRAP=true`.
 
 ### 1.13.5 HashiCorp Vault — teoría de gestión de secretos
 
@@ -570,17 +559,17 @@ Componentes:
 
 - **Prometheus Server**: TSDB embebida + evaluación de reglas de alerta.
 - **ServiceDiscovery**: Kubernetes, EC2, DNS.
-- **Alertmanager**: deduplica, agrupa, enruta alertas a Slack/PagerDuty.
+- **Alertmanager**: deduplica y agrupa alertas (incluido en el chart del Lab 4; configuración de canales externos fuera del alcance de los Labs 1–4).
 
 En Kubernetes, **kube-prometheus-stack** despliega **node-exporter**, **kube-state-metrics** y adaptadores para exponer métricas del plano de datos.
 
 Consultas **PromQL** ejemplo: `rate(http_requests_total[5m])`, `histogram_quantile(0.99, …)`.
 
-*-Diagrama sugerido: targets → Prometheus → Grafana dashboards / Alertmanager → Slack.-*
+*-Diagrama sugerido: targets → Prometheus → Grafana dashboards / Alertmanager.-*
 
 ### 1.13.7 Grafana — visualización, dashboards y alertas
 
-**Grafana** consume datasources (Prometheus, Loki, CloudWatch) para construir **dashboards** declarativos en JSON o provisioning YAML. Soporta:
+**Grafana** consume **Prometheus** como datasource principal en el Lab 4 para construir **dashboards** declarativos en JSON o provisioning YAML. Soporta:
 
 - Variables de dashboard (`$namespace`)
 - Carpetas por equipo
@@ -601,87 +590,33 @@ Separación conceptual:
 
 Combina con **Ingress canary** (tráfico HTTP 90/10) para capas distintas: flag controla lógica de negocio; balanceador controla versión binaria.
 
-### 1.13.9 Grafana k6 — herramienta y conceptos de prueba de carga
+### 1.13.9 Pruebas de carga — conceptos y Apache JMeter (Laboratorio 2)
 
-#### ¿Qué es k6?
+#### Conceptos generales de ingeniería de carga
 
-**k6** (hoy comercializado como **Grafana k6**) es una herramienta **open source** de **pruebas de carga** y rendimiento orientada a desarrolladores y pipelines CI/CD. El proyecto fue creado por Load Impact y pasó al ecosistema **Grafana Labs**; el binario está escrito en **Go** y es liviano (no requiere JVM). Los escenarios se escriben en **JavaScript** (compatibilidad ES6 según versión) mediante la API de k6: se define qué peticiones HTTP/gRPC (u otros protocolos vía extensiones) ejecuta cada **usuario virtual** y cómo evoluciona la carga en el tiempo.
-
-En la práctica, k6 **simula muchos clientes concurrentes** que golpean la aplicación (API REST del Device Manager, Ingress en Kubernetes, balanceadores en AWS, etc.) y **mide** cómo responde el sistema (latencias, errores, throughput). Los resultados sirven para validar **SLAs** internos del laboratorio (“p95 < 500 ms con 200 RPS”), detectar cuellos de botella antes de producción y complementar el **Horizontal Pod Autoscaler**, porque muestran saturación incluso cuando el autoscaler aún no ha añadido réplicas.
-
-Ejecución típica: `k6 run script.js` en CLI; también existe **k6 Cloud** (SaaS) para distribuir generación de carga geográficamente y guardar históricos —opcional en el PI si la cátedra lo habilita.
-
-#### Conceptos generales de ingeniería de carga (aplicables a k6 y a JMeter)
-
-Antes de nombrar ejecutores concretos de k6, conviene fijar vocabulario común:
-
+Las pruebas de carga **simulan muchos clientes concurrentes** que golpean la aplicación (en el PI: API REST del Device Manager vía Service o Ingress en Kubernetes) y **miden** latencias, errores y throughput. Los resultados validan SLAs internos del laboratorio, detectan cuellos de botella y complementan el **Horizontal Pod Autoscaler (HPA)**.
 
 | Concepto                     | Explicación breve                                                                                                                                                                                      |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Usuario virtual (VU)**     | Lógica de ejecución independiente (un “actor” que repite un guion: login, listar, crear recurso). No equivale a un humano real con tiempo de reflexión largo salvo que se modele **think time**.       |
-| **Iteración**                | Una pasada completa del guion definido en el script (por ejemplo todas las peticiones del escenario default).                                                                                          |
-| **Throughput / RPS**         | Peticiones completadas por segundo (**requests per second**, a veces **iteraciones por segundo**). Indica **capacidad de servicio** bajo carga.                                                        |
-| **Latencia**                 | Tiempo entre envío de solicitud y respuesta completa. Suele reportarse como **p50** (mediana), **p95**, **p99**: percentil 95 significa “el 95 % de las peticiones fueron más rápidas que este valor”. |
-| **Tasa de error**            | Porcentaje de respuestas HTTP no exitosas (4xx/5xx) o timeouts; umbrales típicos en CI (`< 1 %`).                                                                                                      |
-| **Saturation / utilización** | En el sistema bajo prueba: CPU/memoria de Pods, colas en balanceador, **connection limits**. Cuando la latencia crece y los errores aparecen sin más CPU disponible, el servicio está **saturado**.    |
+| **Usuario virtual (VU)**     | Actor lógico que repite un guion (p. ej. listar dispositivos). En JMeter se modela con **Thread Groups** (hilos).                                                                                      |
+| **Iteración**                | Una pasada completa del guion definido en el plan de prueba.                                                                                                                                           |
+| **Throughput / RPS**         | Peticiones completadas por segundo; indica capacidad bajo carga.                                                                                                                                       |
+| **Latencia**                 | Tiempo entre solicitud y respuesta; suele reportarse **p50**, **p95**, **p99**.                                                                                                                        |
+| **Tasa de error**            | Porcentaje de respuestas HTTP no exitosas o timeouts.                                                                                                                                                  |
+| **Saturación**               | CPU/memoria de Pods al límite; el HPA no sustituye RAM física del nodo (observado en Lab 2 con ~18 réplicas).                                                                                          |
 
+**Tipos de prueba:** smoke (mínima), carga nominal, **estrés** (más allá del nominal), **spike** (pico brusco), **soak** (carga prolongada). **Ramping:** subida gradual de hilos o peticiones para dejar estabilizar el HPA.
 
-**Tipos de prueba** (patrones de comportamiento en el tiempo):
+#### Apache JMeter en el Laboratorio 2
 
-- **Smoke / sanity**: carga **mínima** para verificar que el endpoint responde y el script funciona; no evalúa capacidad.
-- **Load / carga nominal**: intensidad cercana al **tráfico esperado** en operación normal (o al objetivo del Laboratorio); sirve para validar SLAs “de día a día”.
-- **Stress / estrés**: se **incrementa la carga más allá** del nivel nominal hasta encontrar **degradación** o fallos; objetivo: conocer **punto de quiebre**, comportamiento bajo presión y recuperación.
-- **Spike / pico**: aumento **brusco y corto** de concurrencia o de tasa de llegada (simula viralización o reapertura); evalúa si el sistema **absorbe el golpe** (autoscaler, colas, circuit breakers).
-- **Soak / endurance / resistencia**: carga **moderada pero prolongada** (horas); revela **fugas de memoria**, agotamiento de conexiones, degradación lenta o problemas de disco/log.
+**Apache JMeter** es una aplicación **Java** de código abierto para pruebas de carga web y REST. Ofrece **GUI** para armar planes (**.jmx**): **Thread Groups**, **HTTP Samplers**, **Listeners**, **Timers** y **Assertions**. En carga seria se usa modo **non-GUI** (`jmeter -n -t plan.jmx -l resultados.jtl`).
 
-**Ramping (rampa)**: subida o bajada **gradual** de usuarios virtuales o de **tasa de llegada** en el tiempo, en lugar de pasar de 0 a 1000 instantáneamente. Sirve para calentar cachés, dejar estabilizar réplicas del HPA o imitar el arranque de un evento real.
+En el **Laboratorio 2**, la validación del HPA se realizó con **JMeter 5.5** como **Job** de Kubernetes (`justb4/jmeter:5.5`): plan en **ConfigMap**, tráfico contra `tp1-backend-service`, salida en `results.jtl`. Cuatro escenarios variaron `maxReplicas` y carga para observar techo del HPA, saturación de RAM del nodo y **desescalado** tras cesar las peticiones.
 
-**Ramping arrival rate** (modelo que k6 expone como *executor*): en lugar de fijar solo “N usuarios concurrentes”, se controla **cuántas nuevas iteraciones por segundo** se **arrancan** (tasa de llegada al sistema). Es útil cuando el negocio piensa en **pedidos por segundo** más que en “usuarios”. Se combina con duración de rampa (`startRate`, `timeUnit`, etapas `preAllocatedVUs` / `maxVUs` para que el motor pueda abrir más VUs si hace falta cumplir la tasa).
-
-**Constant VUs**: número fijo de usuarios virtuales que ejecutan el guion en bucle durante un tiempo; cada VU inicia la siguiente iteración según termina la anterior (salvo `sleep`). Es el modelo más intuitivo para empezar.
-
-#### Ejecutores y elementos específicos de k6
-
-k6 agrupa la lógica en **executors** (estrategias de cómo programar VUs e iteraciones):
-
-- `**shared-iterations*`*: total de iteraciones repartidas entre VUs —útil cuando se quiere un número fijo de ejecuciones globales.
-- `**per-vu-iterations**`: cada VU ejecuta exactamente N iteraciones.
-- `**constant-vus**`: mantiene un número constante de VUs durante un tiempo.
-- `**ramping-vus**`: rampas de concurrencia (sube/baja el número de VUs por etapas).
-- `**ramping-arrival-rate**`: rampas de **tasa de llegada** (iteraciones/segundo u otra unidad según configuración).
-
-**Checks**: aserciones por respuesta (`check(response, { 'status es 200': (r) => r.status === 200 })`); no detienen el test por defecto pero dejan trazabilidad.
-
-**Thresholds (`thresholds`)**: criterios de fallo del ensayo global (`http_req_duration: ['p(95)<500']`, `http_req_failed: ['rate<0.01']`). Si se violan, k6 termina con código distinto de cero —ideal para **fallar el pipeline** CI cuando el rendimiento regresa.
-
-**Salida**: métricas integradas (`http_req_duration`, `http_reqs`, `vus`, `iteration_duration`, …); integración con **Prometheus** (remote write), JSON, CSV o Grafana Cloud.
-
-*-Diagrama sugerido: generador k6 → balanceador → Ingress → Pods → métricas Prometheus correlacionadas en Grafana.-*
-
-### 1.13.10 Apache JMeter — herramienta complementaria de carga
-
-#### ¿Qué es JMeter?
-
-**Apache JMeter** es una aplicación **Java** de código abierto pensada inicialmente para pruebas de carga web y hoy extendida a FTP, JDBC, JMS, SOAP/REST, etc. A diferencia de k6 (orientado a código + CLI), JMeter ofrece una **interfaz gráfica (GUI)** para **grabar y ensamblar** planes de prueba: **Thread Groups** (hilos = usuarios virtuales), **Samplers** (petición HTTP), **Listeners** (tablas y gráficos de resultados), **Timers** (think time), **Assertions** y elementos de configuración (cookies, cabeceras).
-
-El modelo mental es **hilos concurrentes** que ejecutan el árbol de elementos en bucles; la GUI consume **mucha memoria** para cargas grandes, por lo que en serio se usa **modo non-GUI** (`jmeter -n -t plan.jmx -l resultados.jtl`) al igual que **distributed testing** con **master/slaves** para superar el límite de una sola JVM.
-
-#### ¿Cuándo usar JMeter frente a k6?
-
-
-| Criterio                          | k6                                | JMeter                                     |
-| --------------------------------- | --------------------------------- | ------------------------------------------ |
-| Curva de aprendizaje CI/script    | Alta para quien ya programa JS    | GUI amigable para exploración manual       |
-| Consumo de recursos del generador | Bajo (binario Go)                 | JVM; puede requerir más RAM y tuning heap  |
-| Protocolos y plugins              | HTTP/gRPC muy maduros; extensible | Muy amplio ecosistema legacy (SOAP, JDBC…) |
-| Integración pipeline              | Nativa, thresholds, salida JSON   | Requiere parsear JTL/XML o usar plugins    |
-
-
-En el marco del PI, **k6** encaja como **herramienta por defecto** para laboratorios cloud/Kubernetes por ligereza y código versionado; **JMeter** aporta valor cuando el docente o el alumno necesitan **prototipar interacciones complejas en GUI**, integrar **BD** con JDBC o reutilizar planes corporativos ya existentes en `.jmx`. Las **definiciones de tipos de prueba** (stress, spike, ramping, métricas) de la subsección anterior aplican igual: solo cambia el mecanismo para expresar rampas (por ejemplo **Ultimate Thread Group** con plugins o escalones en Thread Group).
-
+*-Diagrama sugerido: Job JMeter → Service backend → HPA escala Deployment; correlación opcional con métricas del Lab 4.-*
 *-Imagen sugerida: captura de la GUI de JMeter con Thread Group + HTTP Request + Summary Report.-*
 
-### 1.13.11 Figuras conceptuales (descripción textual)
+### 1.13.10 Figuras conceptuales (descripción textual)
 
 Para cuando el informe se exporte a PDF con diagramas formales, aquí se anticipa la narrativa de tres vistas útiles:
 
@@ -693,9 +628,9 @@ Para cuando el informe se exporte a PDF con diagramas formales, aquí se anticip
 
 Estas vistas deben convertirse más adelante en figuras numeradas para el **Índice de figuras** cuando el documento se congele.
 
-### 1.13.12 Límites del marco y trabajo futuro
+### 1.13.11 Límites del marco y trabajo futuro
 
-Este marco **no** sustituye la documentación oficial ni los manuales de laboratorio: sintetiza conceptos para lectura continua. Ciertos temas —optimización de costos FinOps, multi-region active-active, service meshes como Istio o Linkerd, políticas OPA/Gatekeeper— quedan fuera del núcleo pedagógico pero pueden mencionarse en ampliaciones futuras de la tesis o en trabajos derivados.
+Este marco **no** sustituye la documentación oficial ni los manuales de laboratorio: sintetiza conceptos para lectura continua. Ciertos temas —optimización de costos FinOps, multi-region active-active, service meshes como Istio o Linkerd— quedan fuera del núcleo pedagógico de los Labs 1–4 pero pueden mencionarse en ampliaciones futuras de la tesis o en trabajos derivados.
 
 ---
 
@@ -705,11 +640,9 @@ Esta sección concentra la teoría de los **servicios AWS** que el PI utiliza o 
 
 *-Diagrama sugerido: mapa mental “AWS Organizations → cuenta → región → VPC → AZ → subnets → servicios anclados”.-*
 
-### 1.14.1 Modelo global: regiones, zonas de disponibilidad y Local Zones
+### 1.14.1 Modelo global: regiones y zonas de disponibilidad
 
-**AWS** particiona el mundo en **Regiones** (`us-east-1`, `sa-east-1`, …), cada una con múltiples **Availability Zones (AZ)** — centros de datos separados físicamente conectados por red de baja latencia. Diseñar para HA implica repartir réplicas entre AZ (Kubernetes `topologySpreadConstraints`, RDS Multi-AZ, etc.).
-
-**Local Zones** y **Wavelength** existen para latencia ultra baja; no son núcleo del PI salvo casos especiales.
+**AWS** particiona el mundo en **Regiones** (`us-east-1`, `sa-east-1`, …), cada una con múltiples **Availability Zones (AZ)** — centros de datos separados físicamente conectados por red de baja latencia. Los Labs 3–4 despliegan VPC y EKS en **dos AZ** (`us-east-1a`, `us-east-1b`).
 
 ### 1.14.2 Modelo de responsabilidad compartida y cumplimiento
 
@@ -719,10 +652,9 @@ AWS opera la infraestructura física y los hipervisores de servicios gestionados
 
 **IAM** define:
 
-- **Usuarios**: identidad humana o técnica con **Access Key** (ID + Secret) — evitar en prod madura; rotar y scope mínimo.
-- **Roles**: entidades asumidas vía **STS AssumeRole** con credenciales temporales (**AccessKeyId**, **SecretAccessKey**, **SessionToken**).
+- **Usuarios**: identidad humana o técnica con **Access Key** (ID + Secret); en el Lab 1 las usa GitHub Actions desde secrets — rotar y scope mínimo.
+- **Roles**: entidades asumidas vía **STS AssumeRole** con credenciales temporales.
 - **Políticas JSON**: listas `Allow`/`Deny` sobre acciones (`ecr:BatchGetImage`) y recursos (ARN).
-- **Federación OIDC/SAML**: GitHub → OIDC → rol IAM sin secretos estáticos.
 
 **ARN** (`arn:partition:service:region:account-id:resource-type/resource-id`) identifica unívocamente recursos.
 
@@ -730,13 +662,7 @@ AWS opera la infraestructura física y los hipervisores de servicios gestionados
 
 ### 1.14.4 Amazon ECR — segunda profundización (registro como columna vertebral)
 
-(véase también §1.7) ECR es el servicio que materializa el vínculo entre **artifact** y **cuenta AWS**. Puntos adicionales:
-
-- **Replication**: políticas multi-región para DR.
-- **Lifecycle policies**: purga automática de imágenes sin tags o antiguas.
-- **Image scanning**: integración con **Amazon Inspector** para CVE.
-
-Permiso mínimo pull desde EKS: política en instancia worker o IRSA en Pod.
+(véase también §1.7) ECR es el servicio que materializa el vínculo entre **artifact** y **cuenta AWS**. En Labs 3–4: **lifecycle policies** (retención ~30 imágenes), **`scan_on_push`**, pull desde nodos EKS vía permisos del **node group**.
 
 ### 1.14.5 Redes: VPC, subnets, route tables, Internet Gateway, NAT
 
@@ -744,42 +670,25 @@ Permiso mínimo pull desde EKS: política en instancia worker o IRSA en Pod.
 
 Para **EKS**, el **AWS VPC CNI** asigna IPs de la VPC directamente a Pods (modo tráfico ENI) — implica planificar tamaños de subnet.
 
-*-Diagrama sugerido: VPC con subnets públicas (ALB) y privadas (workers, Pods).-*
+*-Diagrama sugerido: VPC con subnets públicas (NAT/IGW) y privadas (node groups EKS).-*
 
-### 1.14.6 Balanceo de carga: ELB, ALB, NLB
+### 1.14.6 Amazon EKS — Kubernetes administrado en AWS
 
-**Classic Load Balancer** (legacy). **Application Load Balancer (ALB)**: HTTP/S, routing L7, integración nativa con **Ingress** en EKS. **Network Load Balancer (NLB)**: TCP/UDP de muy baja latencia, IPs estáticas, preservación de IP origen.
+**EKS** ejecuta el **plano de control** como servicio; en los Labs 3–4 el cliente administra **managed node groups** (EC2) provisionados con el **módulo Terraform AWS EKS** (`terraform-aws-modules/eks`). La aplicación Device Manager **no se despliega en EKS** en esos laboratorios: el foco es red, clúster y (Lab 4) stack de monitoreo.
 
-Target types: **instance** vs **IP** (para Pods en VPC CNI).
+*-Diagrama sugerido: control plane AWS-managed ↔ API ↔ worker nodes ↔ ECR pull; Lab 4 añade namespace monitoring con Helm.-*
 
-### 1.14.7 Amazon EKS — Kubernetes administrado en AWS
-
-**EKS** ejecuta el **plano de control** como servicio; el cliente administra **node groups** (EC2 con AMI optimizada) o **Fargate** (sin gestionar instancias).
-
-Integraciones clave:
-
-- **eksctl**, **Terraform AWS EKS module**
-- **IAM Roles for Service Accounts (IRSA)**: anotaciones ServiceAccount → rol IAM → tokens OIDC web identity
-- **Cluster Autoscaler** / **Karpenter** para nodos elásticos
-- **Load Balancer Controller** para ALB/NLB desde Ingress
-
-*-Diagrama sugerido: control plane AWS-managed ↔ API ↔ worker nodes ASG ↔ Pods ↔ ECR pull.-*
-
-### 1.14.8 Computación: EC2 y AMIs
+### 1.14.7 Computación: EC2 y AMIs
 
 **EC2** provee máquinas virtuales; **Auto Scaling Groups** mantienen capacidad deseada. Los nodos EKS son EC2 con disco, tipo instancia elegido según carga (CPU vs network optimized).
 
-### 1.14.9 Almacenamiento: EBS, S3
+### 1.14.8 Almacenamiento: EBS, S3
 
 **EBS** volúmenes por AZ para estado durable de bases en EC2; snapshots a S3.
 
 **Amazon S3** es **objeto** altamente durable; caso PI típico: **Terraform remote state**, artefactos de build, logs estáticos. Versionado + **SSE-KMS** recomendado para buckets de estado.
 
-### 1.14.10 Amazon DynamoDB
-
-Base NoSQL serverless con modelo clave-valor y documentos; **uso PI**: tabla de **Terraform lock** (partition key `LockID`). Puede servir también como backend de feature flags caseros —no es el caso si se usa Split SaaS.
-
-### 1.14.11 AWS Secrets Manager y Systems Manager Parameter Store
+### 1.14.9 AWS Secrets Manager y Systems Manager Parameter Store
 
 **Secrets Manager**: secretos **rotativos** automáticos para RDS, API keys con políticas de rotación lambda.
 
@@ -787,49 +696,28 @@ Base NoSQL serverless con modelo clave-valor y documentos; **uso PI**: tabla de 
 
 La Solicitud del PI cita **Secrets Manager** como referencia para gestión segura frente a YAML plano.
 
-### 1.14.12 AWS KMS — cifrado
+### 1.14.10 AWS KMS — cifrado
 
 **KMS** gestiona **Customer Master Keys (CMK)**; uso: cifrado **S3**, **EBS**, **Secrets Manager**, **logs**. Integración IAM granular (`kms:Decrypt`).
 
-### 1.14.13 AWS CloudWatch — métricas, logs y alarmas
+### 1.14.11 Observabilidad en AWS vs en el clúster (Labs 1–4)
 
-**CloudWatch Metrics**: métricas estándar EC2, ELB, personalizadas via API.
+**Amazon CloudWatch** es el servicio nativo de métricas y logs de AWS. En los **Laboratorios 1–4** la observabilidad docente de cargas Kubernetes se implementó con **Prometheus y Grafana** (chart `kube-prometheus-stack` en Lab 4); los **logs del plano de control EKS** están deshabilitados en IaC por costo. CloudWatch permanece como referencia para operación AWS en ampliaciones futuras.
 
-**CloudWatch Logs**: agregación de logs; **insights** para consultas.
-
-**Alarms**: disparan **SNS** → email/Slack/Lambda — útil si Grafana no está disponible en un laboratorio intermedio.
-
-### 1.14.14 AWS STS y federación GitHub → AWS
-
-**STS AssumeRoleWithWebIdentity** permite que GitHub Actions sin secretos AWS largos obtenga credenciales temporales si el admin creó **OIDC identity provider** en IAM y trust policy del rol referencia `repo:org/name:ref`.
-
-### 1.14.15 Amazon Inspector y seguridad postura
-
-**Inspector** escanea EC2, ECR imágenes, Lambda —informe CVE priorizado. Complementa Sonar / escaneo dependencias.
-
-### 1.14.16 Route 53 (DNS)
-
-**Route 53** hospeda zonas públicas/privadas; registros **ALIAS** hacia ALB. En Ingress EKS suele automatizarse DNS externo + cert **ACM**.
-
-### 1.14.17 AWS Certificate Manager (ACM)
-
-Emite certificados TLS para ALB/Ingress; renovación automática cuando validación DNS/route funciona.
-
-### 1.14.18 Costos, etiquetado y Budgets
-
-**Cost Explorer** + **Budgets** alertan deriva de gastos —crítico en cuentas educativas compartidas.
-
-### 1.14.19 Relación servicios AWS ↔ laboratorios PI (tabla guía)
+### 1.14.12 Relación servicios AWS ↔ laboratorios PI (tabla guía)
 
 
 | Servicio AWS                            | Laboratorio típico |
 | --------------------------------------- | ------------------ |
-| IAM, ECR                                | 1                  |
-| VPC concepts (cuando se use EKS pronto) | 2–4                |
-| Terraform state S3 / DynamoDB           | 3                  |
-| EKS, ELB, EC2                           | 4                  |
-| Secrets Manager + KMS                   | 5–6                |
-| CloudWatch end-to-end                   | 4–6                |
+| IAM, ECR (push CI)                      | 1                  |
+| ECR (pull en Minikube)                  | 2                  |
+| metrics-server / HPA                    | 2                  |
+| VPC, subnets, NAT, IGW                  | 3–4                |
+| Terraform state S3 + lockfile (`use_lockfile`) | 3–4         |
+| EKS, EC2 (node groups)                  | 3–4                |
+| ECR (repos + scan_on_push en IaC)       | 3–4                |
+| Prometheus/Grafana (Helm en Terraform)  | 4                  |
+| Secrets Manager + KMS (ampliado)        | 5–6 (propuesta)    |
 
 
 *-Nota para diseño gráfico: esta tabla puede pasarse al Índice de tablas como Tabla X.-*
@@ -848,11 +736,11 @@ Diseñar y desarrollar una propuesta pedagógica basada en laboratorios técnico
 | Lab | Objetivo parcial                                                                                           |
 | --- | ---------------------------------------------------------------------------------------------------------- |
 | 1   | Containerizar aplicación, automatizar CI/CD hasta registro ECR con pruebas y análisis estático.            |
-| 2   | Desplegar cargas en Kubernetes con Helm; exponer servicios (NodePort/Ingress); bases de escalado y estrés. |
-| 3   | Provisionar infraestructura en AWS con Terraform y buenas prácticas de estado y módulos.                   |
-| 4   | Desplegar EKS con Terraform e integrar observabilidad (Prometheus/Grafana) vía Helm.                       |
-| 5   | Incorporar feature flags y despliegues canary con segmentación de tráfico y rollback.                      |
-| 6   | Integrar pipeline completo (build, IaC, deploy Helm, secretos, monitoreo, métricas tipo DORA).             |
+| 2   | Desplegar en Minikube con manifiestos y Helm; NodePort/Ingress; HPA + metrics-server; estrés con JMeter.   |
+| 3   | Provisionar VPC, ECR y EKS en AWS con Terraform/Terragrunt, estado remoto S3 y entornos dev/prd.           |
+| 4   | Extender IaC con observabilidad en EKS (kube-prometheus-stack vía Helm en Terraform).                      |
+| 5   | Incorporar feature flags y despliegues canary con segmentación de tráfico y rollback (propuesta).          |
+| 6   | Integrar pipeline completo (build, IaC, deploy Helm, secretos, monitoreo, métricas tipo DORA) (propuesta). |
 
 
 ## 2.3 Usuarios y destinatarios
@@ -863,10 +751,13 @@ Diseñar y desarrollar una propuesta pedagógica basada en laboratorios técnico
 
 ## 2.4 Requerimientos funcionales (resumen)
 
-- RF1: Disponer de una aplicación de referencia con API y cliente web desplegables como contenedores.
-- RF2: Automatizar build, test y publicación de imágenes con política de ramas y registro.
-- RF3: Proveer material didáctico por laboratorio (guía, consignas, informe modelo o informe final).
-- RF4–RFn: Completar progresivamente despliegue en K8s, IaC, EKS, flags y pipeline integral según la Solicitud aprobada.
+- **RF1** (cumplido — Lab 1): Aplicación de referencia Device Manager (API .NET + SPA React) empaquetada en contenedores.
+- **RF2** (cumplido — Lab 1): Build, test, análisis estático y publicación de imágenes en ECR con política de ramas.
+- **RF3** (cumplido — Labs 1–4): Material didáctico por laboratorio (guía, consignas, informe final, entregables).
+- **RF4** (cumplido — Lab 2; base cloud — Lab 3): Despliegue en Kubernetes (Minikube + manifiestos/Helm); clúster EKS provisionado en IaC.
+- **RF5** (cumplido — Labs 3–4): Infraestructura como código en AWS con módulos, variables, estado remoto y entornos separados.
+- **RF6** (cumplido parcial — Lab 4): Observabilidad con Prometheus y Grafana en el clúster; métricas de aplicación para HPA en Lab 2 (metrics-server).
+- **RF7** (propuesta — Labs 5–6): Feature flags, canary, secretos avanzados y pipeline integral con métricas DORA según Solicitud del PI.
 
 ## 2.5 Requerimientos no funcionales
 
@@ -877,24 +768,104 @@ Diseñar y desarrollar una propuesta pedagógica basada en laboratorios técnico
 
 ## 2.6 Riesgos principales
 
-- Complejidad de permisos AWS y costos inadvertidos → mitigación con límites, etiquetado y revisión.
-- Divergencia entre documentación y estado real de repos → mitigación con revisión periódica de workflows.
-- Sobrecarga estudiantil → mitigación con entregas incrementales y criterios de aceptación explícitos.
+- **Permisos AWS y costos inadvertidos** (Labs 3–4): NAT, EKS y almacenamiento de state → mitigación con etiquetado, buckets por entorno, nodos pequeños y revisión docente.
+- **Divergencia documentación ↔ repos**: workflows o rutas de código que cambian sin actualizar guías → mitigación con revisión periódica y referencias cruzadas en este informe.
+- **Sobrecarga estudiantil**: acumulación de herramientas nuevas → mitigación con entregas incrementales y criterios de aceptación explícitos por lab.
+- **Lab 2 — capacidad del clúster local**: el HPA puede solicitar más réplicas de las que admite la RAM de Minikube → documentar límites físicos frente a autoscaling (prueba 3 del informe Lab 2).
+- **Lab 2 — fuente del plan JMeter**: riesgo de confundir `config/test-plan.jmx` con el ConfigMap aplicado al Job → dejar explícita la fuente de verdad en guía y corrección.
+- **Lab 4 — orden de despliegue**: unidad `monitoring` sin `dependency` Terragrunt a `eks` → aplicar en dos fases o documentar fallo si el clúster no existe.
+- **Lab 4 — secretos en texto plano**: contraseñas Grafana en `terragrunt.hcl` solo válidas en laboratorio; advertir rotación y Secrets Manager para producción.
+
+## 2.7 Estado de avance del PI
+
+| Lab | Estado | Documentación en repositorio |
+| --- | ------ | ------------------------------ |
+| 1 | Implementado y documentado | `repositories/labs/lab1/docs/` |
+| 2 | Implementado y documentado | `repositories/labs/lab2/ICOMP-UNC-pi-2025-Infra-lab2/docs/` |
+| 3 | Implementado y documentado | `repositories/labs/lab3/ICOMP-UNC-pi-2025-Infra-lab3/docs/` |
+| 4 | Implementado y documentado | `repositories/labs/lab4/ICOMP-UNC-pi-2025-Infra-lab4/docs/` |
+| 5 | Propuesta (Solicitud PI) | Por desarrollar |
+| 6 | Propuesta (Solicitud PI) | Por desarrollar |
+
+Los cuatro primeros laboratorios disponen de **informe final**, **guía y consignas** y **entregables**; los Labs 3 y 4 incluyen además diagramas **Mermaid** exportables a figuras del PDF de tesis.
 
 ---
 
 # 3. Selección de herramientas y stack
 
+Este capítulo resume las tecnologías adoptadas en el PI, organizadas por capas del ciclo de vida. La selección prioriza la **alianza AWS-UNC**, la **progresión pedagógica** (local → nube gestionada) y herramientas con documentación oficial madura. Las tablas distinguen lo **implementado y documentado** en los Laboratorios 1–4 de lo **planificado** en los Laboratorios 5–6 según la Solicitud del proyecto.
 
-| Componente            | Elección                         | Justificación breve                                                   |
-| --------------------- | -------------------------------- | --------------------------------------------------------------------- |
-| Backend               | .NET 9 / ASP.NET Core            | Tipado fuerte, ecosistema empresarial, buen soporte Docker y pruebas. |
-| Frontend              | React + Vite + MUI               | SPA moderna, build rápido, componentes accesibles.                    |
-| CI/CD                 | GitHub Actions                   | Integración nativa con el código; mercado de acciones maduro.         |
-| Registro              | Amazon ECR                       | Alineación AWS-UNC y continuidad hacia EKS.                           |
-| Calidad               | SonarCloud + tests automatizados | Feedback temprano sobre deuda y cobertura.                            |
-| Orquestación (Lab 2+) | Kubernetes + Helm                | Estándar de industria; charts reutilizables.                          |
+## 3.1 Aplicación de referencia (Device Manager)
 
+| Componente | Elección | Versión / detalle | Justificación |
+| ---------- | -------- | ----------------- | ------------- |
+| Backend | ASP.NET Core | .NET 9 | API REST en capas Web / Business / Data; pruebas unitarias en CI |
+| Frontend | React + Vite + MUI | React 18, Vite 5, MUI 5 | SPA con build estático servido en contenedor liviano |
+| Comunicación | REST + JSON | OpenAPI (opcional) | Contrato entre cliente y API; misma app en todos los labs |
+
+## 3.2 Integración, calidad y entrega (Laboratorio 1)
+
+| Componente | Elección | Uso en el PI |
+| ---------- | -------- | ------------ |
+| Control de versiones | Git, GitHub | Ramas `develop` / `main`; integración por PR |
+| CI/CD | GitHub Actions | Jobs `ci` (tests + SonarCloud) y `build-and-push` (Docker → ECR) |
+| Contenedores | Docker, Buildx / BuildKit | Dockerfiles multi-stage; caché de capas en pipeline |
+| Registro | Amazon ECR | Repositorios diferenciados por línea (integración vs producción) |
+| Calidad | SonarCloud, cobertura de tests | OpenCover (.NET), lcov (frontend) |
+| Desarrollo local | Docker Compose | Levantamiento integrado front + back (entregable alumnos) |
+
+## 3.3 Orquestación de cargas y escalado (Laboratorio 2)
+
+| Componente | Elección | Detalle de implementación |
+| ---------- | -------- | ------------------------- |
+| Orquestación | Kubernetes | Deployments, Services, HPA, ConfigMap, Job |
+| Clúster de práctica | Minikube | Un nodo; addons ingress y metrics-server |
+| Empaquetado | Helm 3 | Charts `tp1-backend` y `tp1-frontend`; overrides `Helm/dev/`, `Helm/prd/` |
+| Exposición | NodePort, Ingress (nginx) | Host `app.local`; rutas `/` (UI) y `/api` (backend) |
+| Autoscaling | HPA (autoscaling/v2) + metrics-server | CPU target 70 %; request 200m; min/max réplicas configurables |
+| Pruebas de carga | Apache JMeter 5.5 | Imagen `justb4/jmeter`; Job + ConfigMap en namespace `jmeter` |
+| Operación | kubectl, helm | `apply`, `upgrade --install`, observación de HPA bajo carga |
+
+## 3.4 Infraestructura como código (Laboratorios 3 y 4)
+
+| Componente | Elección | Detalle de implementación |
+| ---------- | -------- | ------------------------- |
+| IaC | Terraform ≥ 1.6 | Módulos propios en `modules/`; configuración por entorno en `live/` |
+| Orquestación IaC | Terragrunt 1.x | Backend común, provider generado, `dependency` entre unidades |
+| Proveedor cloud | AWS | Región `us-east-1`; entornos `dev` y `prd` |
+| Módulos community | terraform-aws-modules | VPC ~5.0, EKS 20.31.0, ECR ~2.0 |
+| Estado remoto | Amazon S3 + lockfile | Cifrado; prefijo `lab4/` en Lab 4 para no colisionar con Lab 3 |
+| Kubernetes gestionado | Amazon EKS 1.35 | Node groups en subnets privadas; endpoint público para operación docente |
+| Helm en IaC | Provider Helm + `helm_release` | Lab 4: `kube-prometheus-stack` en namespace `monitoring` |
+| Operación | AWS CLI, Terragrunt, kubectl | Bootstrap S3, `run --all`, validación post-apply |
+
+## 3.5 Observabilidad (Laboratorio 4)
+
+| Componente | Rol |
+| ---------- | --- |
+| kube-prometheus-stack (Helm) | Despliegue unificado de Prometheus, Grafana, Alertmanager |
+| Prometheus | TSDB y scraping de métricas (node-exporter, kube-state-metrics) |
+| Grafana | Dashboards; acceso por port-forward en contexto de laboratorio |
+| Alertmanager | Enrutamiento básico de alertas (configuración mínima en lab) |
+
+Retención y recursos acotados en `values/monitoring.yaml` (por ejemplo, retención Prometheus 1 día, sin PVC en Grafana) por restricciones de nodos `t3.small` en desarrollo.
+
+## 3.6 Stack planificado (Laboratorios 5 y 6 — Solicitud PI)
+
+Las siguientes herramientas figuran en la propuesta formal del trabajo; **no forman parte de la implementación documentada** en los informes de los Labs 1–4, pero orientan el diseño del material restante:
+
+| Componente | Uso previsto |
+| ---------- | ------------ |
+| Split.io (u equivalente) | Feature flags y experimentación |
+| Despliegues canary | Rollout progresivo y rollback |
+| HashiCorp Vault / AWS Secrets Manager | Gestión de secretos en pipeline y clúster |
+| Grafana k6 | Pruebas de carga en CI/CD (complemento a JMeter del Lab 2) |
+| CodeQL | Análisis de seguridad adicional en GitHub |
+| Métricas DORA, MTTR/MTBF | Correlación operación ↔ entrega (Lab 6) |
+
+## 3.7 Criterios de selección
+
+Se privilegió el ecosistema **AWS** por la alianza institucional y la continuidad desde **ECR** hasta **EKS**. **Kubernetes** y **Helm** son estándar de industria para empaquetar y promover cargas entre entornos. **Terraform** y **Terragrunt** permiten infraestructura revisable en PR y estado remoto compartido. En contexto académico se acotaron costos (`single_nat_gateway`, pocos nodos, logs de control plane EKS deshabilitados en labs, retención corta de métricas). La progresión **Minikube (Lab 2) → EKS en AWS (Labs 3–4)** separa el aprendizaje de objetos Kubernetes del aprovisionamiento de red y cuentas cloud.
 
 ---
 
@@ -904,49 +875,273 @@ Diseñar y desarrollar una propuesta pedagógica basada en laboratorios técnico
 
 ### 4.1.1 Objetivo
 
-Construir imágenes Docker del backend y del frontend, ejecutar **integración continua** con pruebas y **SonarCloud**, y publicar automáticamente en **Amazon ECR** con separación de repositorios según la rama (`develop` vs `main`), incluyendo tags por commit y `latest`.
+Construir imágenes Docker del backend y del frontend de **Device Manager**, ejecutar **integración continua** con pruebas automatizadas y análisis estático (**SonarCloud**), y publicar artefactos en **Amazon ECR** con política de ramas y repositorios diferenciados para integración y producción. Este laboratorio materializa el primer tramo de la Solicitud del PI: *"construcción de imágenes con Docker y automatización de push"* hacia un registro en la nube.
 
-### 4.1.2 Resumen de tareas realizadas
+### 4.1.2 Relación con el resto del PI
 
-1. **Cuenta AWS e IAM**: credenciales usadas vía **GitHub Secrets** (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`), sin valores en el código.
-2. **Backend (.NET)**: solución en capas Web / Business / Data; Dockerfile multi-stage; escucha en puerto 8080 en runtime.
-3. **Frontend (React)**: Dockerfile con build estático y servidor de archivos; configuración runtime para URL de API.
-4. **Pipeline GitHub Actions**: job `ci` ejecuta tests + SonarCloud; job `build-and-push` construye con Buildx y publica en ECR **solo en push** a `develop` o `main`, eligiendo el repositorio ECR de desarrollo o producción según la rama. Tag principal `ref_name-SHA` más `latest`. Job **release** en backend crea GitHub Release en pushes a `main`.
-5. **Política de ramas**: documentada en el workflow — integración vía PR sin push directo a ramas protegidas.
+El Lab 1 produce el **artefacto inmutable** (imagen etiquetada) que consumen el Lab 2 (pull desde Minikube), el Lab 3 (gestión de repos ECR en IaC) y los despliegues posteriores en EKS. Sin trazabilidad commit → tag → digest, los laboratorios de orquestación pierden auditabilidad.
 
-### 4.1.3 Referencia cruzada
+### 4.1.3 Tareas realizadas
 
-El detalle pedagógico y las subsecciones de marco teórico específicas del laboratorio se encuentran en **[Informe final — Lab 1](../../lab1/informe-final-lab1.md)**. Este capítulo del informe PI sintetiza decisiones y evidencia para lectura global de la tesis.
+1. **Cuenta AWS e IAM**: credenciales en **GitHub Secrets**; sin claves en el repositorio.
+2. **Backend (.NET 9)**: capas Web / Business / Data; Dockerfile multi-stage; puerto **8080** en runtime.
+3. **Frontend (React 18 + Vite)**: build estático; entrypoint para inyectar URL de API en runtime.
+4. **Pipeline GitHub Actions**: job `ci` (tests + SonarCloud); job `build-and-push` con **Docker Buildx** hacia ECR en push a `develop` o `main`; tags `ref_name-SHA` y `latest`; job **release** en backend al integrar en `main`.
+5. **Docker Compose**: orquestación local front + back (entregable pedagógico).
+6. **Política de ramas**: integración por PR; publicación en ECR alineada a la línea develop/main según configuración del pipeline.
 
-### 4.1.4 Coherencia con el repositorio (verificación)
+### 4.1.4 Decisiones de diseño
 
-Los workflows en `backend/device-manager-api/.github/workflows/build.yml` y `frontend/device-manager-app/.github/workflows/build.yml` confirman: **dotnet test** con cobertura OpenCover y **SonarScanner** en backend; **npm run test:coverage** y **SonarCloud GitHub Action** en frontend; **ECR público** con repositorios distintos para `develop` y `main`; push de imagen condicionado al éxito del CI.
+| Decisión | Justificación |
+| -------- | ------------- |
+| Dockerfile multi-stage (backend) | Imagen final sin SDK; menor tamaño y superficie de ataque |
+| ECR en lugar de registro genérico | Alineación AWS-UNC y continuidad hacia EKS |
+| Repositorios ECR distintos por línea | Reduce riesgo de promover por error una imagen experimental |
+| SonarCloud en CI | Feedback temprano de calidad y seguridad estática |
+| Secrets en GitHub | Cumple DevSecOps básico; rotación sin cambiar código |
+
+### 4.1.5 Validación y evidencias
+
+| Verificación | Evidencia sugerida |
+| ------------ | ------------------ |
+| Pipeline CI verde en PR | Captura de GitHub Actions (job `ci`) |
+| Imagen en ECR tras merge a rama publicadora | Consola ECR con tags `rama-SHA` y `latest` |
+| Compose local funcional | `docker compose up --build`; UI consume API |
+| Análisis SonarCloud | Dashboard del proyecto sin bloqueos críticos configurados |
+
+*-Figura 4.1 (sugerida): flujo PR → CI (tests + Sonar) → build-and-push → ECR (repos develop/prd).-*
+*-Figura 4.2 (sugerida): secuencia de jobs GitHub Actions con `needs: ci`.-*
+*-Tabla 4.1 (sugerida): comparativa de repositorios ECR por rama.-*
+
+### 4.1.6 Referencia
+
+Detalle ampliado: [Informe final — Lab 1](../../../repositories/labs/lab1/docs/informe-final-lab1.md). Entregables: [entregables-lab1.md](../../../repositories/labs/lab1/docs/entregables-lab1.md).
+
+---
 
 ## 4.2 Laboratorio 2 — Kubernetes y Helm
 
-Estado: **en curso / documentación parcial**. Se prevé narrar despliegue con manifiestos y charts Helm bajo `ICOMP-UNC-pi-2025-Infra-lab2/Kubernetes/`, exposición NodePort/Ingress, límites de recursos y pruebas de estrés. Completar este apartado al cerrar el informe del Lab 2.
+### 4.2.1 Objetivo
 
-## 4.3 Laboratorio 3 — Terraform en AWS
+Desplegar **Device Manager** (imágenes del Lab 1 en **ECR**) en un clúster **Kubernetes** local (**Minikube**): primero con **manifiestos YAML**, luego con **Helm**; exponer la aplicación (**NodePort** e **Ingress**); configurar **HPA** apoyado en **metrics-server**; validar escalado con **pruebas de estrés JMeter** ejecutadas como **Job** en el clúster. Cumple la Solicitud del PI sobre introducción a Kubernetes y Helm.
 
-*(Pendiente de redacción según avance del PI.)*
+### 4.2.2 Relación con laboratorios adyacentes
 
-## 4.4 Laboratorio 4 — EKS y observabilidad
+- **Lab 1:** origen de imágenes (`tp1-backend`, `tp1-frontend`, variantes `-prd`).
+- **Lab 3–4:** mismos charts y conceptos (Deployment, Service, HPA) sobre **EKS** provisionado en AWS; el Lab 2 aísla el aprendizaje de objetos K8s sin costo de nube durante la práctica inicial.
 
-*(Pendiente.)*
+### 4.2.3 Tareas realizadas
 
-## 4.5 Laboratorio 5 — Feature flags y canary
+1. **Minikube**: clúster de un nodo; verificación con `kubectl cluster-info` y `get nodes`.
+2. **metrics-server**: habilitado (addon); prerequisito para HPA y `kubectl top`.
+3. **Manifiestos backend** (`Kubernetes/backend.yaml`): Deployment (imagen ECR, puerto 8080, requests/limits), Service **NodePort 30081**, **HPA** (CPU 70 %, min 1 / max 20).
+4. **Manifiestos frontend** (`Kubernetes/frontend.yaml`): Deployment, NodePort **30080**, variable `VITE_API_BASE_URL` hacia el backend.
+5. **Charts Helm** (`Helm/backend/`, `Helm/frontend/`): `helm upgrade --install` con overrides `Helm/dev/` y `Helm/prd/`.
+6. **Ingress**: addon nginx; host **`app.local`**; rutas `/` → frontend y `/api` → backend; API en mismo origen para la SPA.
+7. **JMeter**: namespace `jmeter`; ConfigMap con plan de prueba; **Job** `justb4/jmeter:5.5` contra `tp1-backend-service`; resultados en `/outputs/results.jtl`.
+8. **Cuatro escenarios HPA**: variación de `maxReplicas` y carga; observación de techo del HPA, saturación de RAM del nodo (~18 réplicas) y **desescalado** ~5 min tras cesar la carga.
 
-*(Pendiente.)*
+### 4.2.4 Artefactos principales
 
-## 4.6 Laboratorio 6 — Pipeline integral
+| Ruta en repo Lab 2 | Contenido |
+| ------------------ | --------- |
+| `Kubernetes/backend.yaml`, `frontend.yaml` | Manifiestos planos |
+| `Helm/backend/`, `Helm/frontend/` | Charts parametrizables |
+| `Helm/dev/`, `Helm/prd/` | Overrides por entorno |
+| `Kubernetes/jmeter-job.yaml`, `configmap.yaml` | Carga in-cluster |
+| `config/test-plan.jmx` | Borrador editable en GUI (no fuente de verdad del Job) |
 
-*(Pendiente.)*
+Repositorio: `repositories/labs/lab2/ICOMP-UNC-pi-2025-Infra-lab2/`.
+
+### 4.2.5 Decisiones de diseño
+
+| Decisión | Justificación |
+| -------- | ------------- |
+| Manifiestos antes que Helm | Pedagogía del PI: objetos explícitos antes de plantillas |
+| NodePort en YAML plano; Ingress en Helm dev | Prueba rápida vs modelo cercano a producción |
+| Solo CPU en HPA | Visible en Minikube sin Prometheus adapter |
+| Request CPU 200m | Porcentaje HPA alcanzable en tiempo de laboratorio |
+| JMeter como Job (no Pod suelto) | Semántica de trabajo terminable; `backoffLimit: 0` |
+| Namespace `jmeter` aislado | Separa tráfico de prueba de workloads de la app |
+
+### 4.2.6 Validación y evidencias
+
+| Verificación | Comando / acción | Evidencia |
+| ------------ | ---------------- | --------- |
+| Pods Running | `kubectl get pods` | Captura |
+| HPA reacciona a carga | `kubectl get hpa -w` durante Job JMeter | Captura o tabla de réplicas vs tiempo |
+| Ingress operativo | Navegador en `http://app.local` | Captura |
+| Helm releases | `helm list` | Salida de terminal |
+| Job JMeter completado | `kubectl get jobs -n jmeter` | Estado Complete |
+
+**Tabla 4.2 — Cuatro pruebas de escalado del HPA (resumen)**
+
+| # | maxReplicas | Observación pedagógica |
+| - | ----------- | ---------------------- |
+| 1 | 5 | HPA llega al techo configurado (límite artificial) |
+| 2 | 15 | Escalado progresivo hasta el máximo bajo carga sostenida |
+| 3 | 20 | ~18 réplicas: nodo sin RAM (HPA no sustituye capacidad física) |
+| 4 | 20 (carga reducida) | Escala 1→11 y **desescala** tras ~5 min al cesar peticiones |
+
+*-Figura 4.3 (sugerida): arquitectura Minikube — Ingress → Services → Pods; ECR como origen de imágenes.-*
+*-Figura 4.4 (sugerida): progresión manifiestos YAML → charts Helm → Ingress unificado.-*
+*-Figura 4.5 (sugerida): secuencia JMeter Job → Service backend → HPA escala Deployment.-*
+*-Tabla 4.3 (sugerida): NodePort (manifiestos) vs ClusterIP + Ingress (Helm dev).-*
+
+Marco teórico de apoyo: §1.11 (Kubernetes), §1.12 (Helm), §1.13.9 (carga y JMeter en Lab 2).
+
+### 4.2.7 Referencia
+
+[Informe final — Lab 2](../../../repositories/labs/lab2/ICOMP-UNC-pi-2025-Infra-lab2/docs/informe-final-lab2.md).
+
+---
+
+## 4.3 Laboratorio 3 — Infraestructura como código en AWS con Terraform
+
+### 4.3.1 Objetivo
+
+Modelar en **AWS** una base de infraestructura **reproducible y versionada** para entornos `dev` y `prd` en `us-east-1`: **VPC** (dos AZ), **ECR** y **EKS**, usando **Terraform** y **Terragrunt**, con **estado remoto en S3** y bloqueo de concurrencia. Extiende la Solicitud del PI (IaC con providers, variables, recursos y estado remoto) más allá del aprovisionamiento manual inicial.
+
+### 4.3.2 Relación con laboratorios adyacentes
+
+- **Lab 1:** repos e imágenes ECR (import si ya existían).
+- **Lab 2:** mismos workloads pueden desplegarse sobre el EKS creado aquí.
+- **Lab 4:** hereda módulos vpc/ecr/eks y añade unidad **monitoring** con prefijo de state `lab4/`.
+
+### 4.3.3 Tareas realizadas
+
+1. **Estructura `modules/` vs `live/`**: módulos reutilizables; unidades Terragrunt por entorno y región.
+2. **`live/root.hcl`**: backend S3, `encrypt = true`, `use_lockfile = true`; provider AWS generado con `allowed_account_ids` y tags (`Lab = lab3`).
+3. **Módulo VPC**: terraform-aws-modules/vpc; CIDR `10.10.0.0/16` (dev) y `10.20.0.0/16` (prd); NAT único; tags ELB para Kubernetes.
+4. **Módulo ECR**: repos del TP; scan on push; lifecycle (~30 imágenes); **import** de repos existentes del Lab 1.
+5. **Módulo EKS**: Kubernetes **1.35**; node groups en subnets privadas; endpoint público; `enable_cluster_creator_admin_permissions`; logs/KMS de lab deshabilitados para costo.
+6. **Entornos dev/prd**: `tp3-dev-eks` (1× `t3.small`) vs `tp3-prd-eks` (2–4× `t3.medium`); buckets de state separados.
+7. **Bootstrap**: `TG_BACKEND_BOOTSTRAP` / script `bin/tg` para crear bucket S3.
+8. **Orden de apply**: vpc → ecr → eks (`terragrunt run --all`); validación con `kubectl get nodes`.
+
+### 4.3.4 Decisiones de diseño
+
+| Decisión | Justificación | Trade-off |
+| -------- | ------------- | --------- |
+| Terragrunt sobre Terraform solo | DRY de backend/provider; `dependency` vpc→eks | Curva de aprendizaje adicional |
+| Módulos community | Rapidez y buenas prácticas AWS | Menos control fino que recursos raw |
+| NAT único | Menor costo en práctica | Menor HA de egress |
+| Endpoint EKS público | Facilita kubectl desde laptops | Mayor superficie; restringir en prod real |
+| Lockfile S3 (`use_lockfile`) | Bloqueo sin servicio extra; menos componentes en cuenta educativa | Patrón más reciente; tutoriales antiguos pueden citar otras opciones |
+| Import ECR | No destruir imágenes del Lab 1 | Paso manual documentado |
+
+### 4.3.5 Validación y evidencias
+
+| Verificación | Evidencia sugerida |
+| ------------ | ------------------ |
+| State en S3 | Listado de bucket y keys por unidad |
+| Plan sin drift inesperado | `terragrunt plan` en vpc, ecr, eks |
+| Nodos Ready | `kubectl get nodes` |
+| Repos ECR gestionados | Consola ECR o `aws ecr describe-repositories` |
+
+**Tabla 4.4 — Comparativa dev / prd (Lab 3)**
+
+| Dimensión | dev | prd |
+| --------- | --- | --- |
+| VPC / CIDR | `tp3-dev-vpc` / `10.10.0.0/16` | `tp3-prd-vpc` / `10.20.0.0/16` |
+| EKS | `tp3-dev-eks`, 1× `t3.small` | `tp3-prd-eks`, 2–4× `t3.medium` |
+| ECR | `tp1-frontend`, `tp1-backend` | sufijo `-prd` |
+| State bucket | `terraform-state-dev-<account>` | `terraform-state-prd-<account>` |
+
+*-Figuras sugeridas (exportar desde `docs/diagramas/` del repo lab3): `arquitectura-lab3.mmd`, `jerarquia-terragrunt.mmd`, `red-vpc-2az.mmd`, `secuencia-despliegue.mmd`, `estado-remoto-bootstrap.mmd`.*
+
+### 4.3.6 Referencia
+
+[Informe final — Lab 3](../../../repositories/labs/lab3/ICOMP-UNC-pi-2025-Infra-lab3/docs/informe-final-lab3.md); [marco-conceptual-lab3.md](../../../repositories/labs/lab3/ICOMP-UNC-pi-2025-Infra-lab3/docs/marco-conceptual-lab3.md).
+
+---
+
+## 4.4 Laboratorio 4 — EKS y observabilidad (Prometheus y Grafana)
+
+### 4.4.1 Objetivo
+
+Extender la infraestructura del **Lab 3** con **observabilidad en el clúster**: instalar mediante **IaC** el chart **kube-prometheus-stack** (Prometheus, Grafana, Alertmanager, exporters), integrando **Helm en Terraform** según la Solicitud del PI sobre EKS y monitoreo con Grafana y Prometheus.
+
+### 4.4.2 Relación Lab 3 → Lab 4
+
+| Aspecto | Lab 3 | Lab 4 |
+| ------- | ----- | ----- |
+| Módulos AWS | vpc, ecr, eks | Los mismos + **monitoring** |
+| Naming / tags | `tp3-*`, `Lab=lab3` | `tp4-*`, `Lab=lab4` |
+| State S3 | `dev/us-east-1/...` | `lab4/dev/us-east-1/...` |
+| Workloads K8s en IaC | No | **helm_release** (Prometheus stack) |
+
+El Lab 4 **no reemplaza** al Lab 3: lo **hereda** y añade la capa de monitoreo.
+
+### 4.4.3 Tareas realizadas
+
+1. **`live/root.hcl`**: prefijo `lab4/` en keys de state; mismos patrones de provider y tags.
+2. **Módulos vpc, ecr, eks**: equivalentes al Lab 3 con naming `tp4-*` y capacidad de nodos según entorno.
+3. **Módulo `monitoring`**: recurso `helm_release` del chart **kube-prometheus-stack** (versión ~69.x); namespace `monitoring`; `values/monitoring.yaml` (retención Prometheus 1d, Grafana sin PVC, recursos bajos).
+4. **Provider Helm generado** en Terragrunt: autenticación al API EKS por nombre de clúster (`tp4-dev-eks` / `tp4-prd-eks`) sin bloque `dependency` al state de eks.
+5. **Apply en dos fases**: primero vpc → ecr → eks (excluyendo monitoring); luego unidad `monitoring` cuando el clúster existe.
+6. **Validación**: `kubectl get pods -n monitoring`; **port-forward** a Grafana; revisión de dashboards por defecto del chart.
+
+### 4.4.4 Decisiones de diseño
+
+| Decisión | Motivación | Trade-off |
+| -------- | ---------- | --------- |
+| Prefijo `lab4/` en state | Convivir con Lab 3 en mismos buckets | Convención a documentar |
+| Helm vía Terraform | Cumple PI: charts en IaC; `plan` unificado | Applies más lentos |
+| Provider Helm sin `dependency` eks | Estados desacoplados | Orden manual: eks antes que monitoring |
+| Sin PVC / retención 1d | Nodos `t3.small`, costo disco | No apto para histórico largo |
+| Contraseñas Grafana en `terragrunt.hcl` | Simplicidad docente | Inaceptable en producción |
+
+### 4.4.5 Validación y evidencias
+
+| Verificación | Acción |
+| ------------ | ------ |
+| Nodos Ready | `kubectl get nodes` |
+| Pods monitoring Running | `kubectl get pods -n monitoring` |
+| Grafana accesible | `kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80` |
+| Apply monitoring limpio | Salida `terragrunt plan/apply` en unidad monitoring |
+
+**Tabla 4.5 — Comparativa dev / prd (Lab 4, extracto)**
+
+| Dimensión | dev | prd |
+| --------- | --- | --- |
+| Cluster | `tp4-dev-eks` | `tp4-prd-eks` |
+| Nodos | 1× `t3.small` | 2–4× `t3.medium` |
+| Grafana (lab) | password documentada `admin` | `changeme-prd` |
+
+*-Figuras sugeridas (repo lab4 `docs/diagramas/`): `arquitectura-lab4.mmd`, `stack-observabilidad-lab4.mmd`, `jerarquia-terragrunt-lab4.mmd`, `secuencia-despliegue-lab4.mmd`, `red-vpc-eks-lab4.mmd`.*
+
+Marco teórico: §1.13.6–1.13.7 (Prometheus, Grafana), §1.12.4 (Helm en IaC), §1.14.6 (EKS).
+
+### 4.4.6 Referencia
+
+[Informe final — Lab 4](../../../repositories/labs/lab4/ICOMP-UNC-pi-2025-Infra-lab4/docs/informe-final-lab4.md).
+
+---
+
+## 4.5 Laboratorio 5 — Feature flags y despliegues canary (propuesta)
+
+Según la **Solicitud del PI**, el Laboratorio 5 integraría una plataforma de **feature flags** (referencia: **Split.io** u equivalente) y **rollouts progresivos tipo canary**, con lógica de promoción y **rollback** ante degradación de métricas. En la implementación documentada hasta la fecha de este informe, el material de los **Labs 1–4** deja preparado el terreno (imágenes versionadas, Helm, observabilidad en EKS), pero **no se incluye aún** la integración de flags ni el enrutamiento ponderado de tráfico en producción docente. El diseño pedagógico previsto combinaría flags (lógica de negocio) con canary a nivel Ingress o service mesh (versión binaria), en línea con §1.13.8 de este documento.
+
+---
+
+## 4.6 Laboratorio 6 — Integración completa del flujo CI/CD (propuesta)
+
+El **Laboratorio 6** cerraría el arco del PI con un **pipeline integral**: build y push a **ECR**, aprovisionamiento **Terraform/Terragrunt**, despliegue **Helm** en Kubernetes, gestión de **secretos**, **monitoreo** (charts Prometheus/Grafana) y correlación con **métricas DORA** y tiempos de recuperación (MTTR y afines), según la Solicitud. Los Labs 1–4 aportan piezas verificables (CI, charts, IaC, observabilidad); el Lab 6 las unificaría en un flujo único automatizado —objetivo declarado para trabajo futuro y extensión del material docente— sin que este informe afirme su implementación completa.
 
 ---
 
 # 5. Conclusiones
 
-*(Pendiente: cerrar al finalizar los laboratorios y la evaluación de resultados frente a la Solicitud del PI. Incluir dificultades, amenazas superadas y trabajo futuro —mantenimiento de guías, métricas de adopción en cátedra si aplica—.)*
+El Proyecto Integrador alcanzó una **primera entrega consolidada** de cuatro laboratorios técnicos que recorren el ciclo de vida de una aplicación moderna en el ecosistema **AWS-UNC**: desde la **containerización** y el **CI/CD** hasta el **despliegue orquestado**, la **infraestructura como código** y la **observabilidad** en **Amazon EKS**. La progresión **Minikube (Lab 2) → EKS en AWS (Labs 3–4)** permitió separar el dominio de objetos Kubernetes del aprovisionamiento de red y cuentas cloud, sin perder continuidad sobre la misma aplicación de referencia y las mismas imágenes en **ECR**.
+
+**Logros principales:** (1) artefactos reproducibles y trazables (imágenes etiquetadas, pipelines declarativos); (2) material didáctico verificable (guías, consignas, informes finales y entregables por lab); (3) infraestructura versionada con **Terragrunt** y estado remoto; (4) monitoreo operativo básico con **Prometheus** y **Grafana** gestionado como código; (5) experiencia de **autoscaling** bajo carga real (HPA + JMeter en Lab 2).
+
+**Dificultades y límites conscientes:** costos y permisos en cuentas educativas; saturación de recursos en clústeres locales frente al HPA; contraseñas y configuraciones simplificadas en labs que no son aptas para producción; orden manual de apply entre unidades Terragrunt (monitoring tras EKS). Estas decisiones se documentaron como **trade-offs pedagógicos**, no como recomendaciones operativas finales.
+
+**Trabajo futuro:** completar los **Laboratorios 5 y 6** (feature flags, canary, secretos avanzados, pipeline integral y métricas DORA); exportar diagramas Mermaid a figuras del informe impreso y recoger métricas de uso en cátedra si el director del PI lo requiere.
+
+En conjunto, el trabajo aporta un **corpus reusable** que vincula contenidos de Ingeniería de Software y Gestión de la Calidad de Software con prácticas actuales de **DevOps** e **ingeniería de infraestructura**, en línea con el objetivo de fortalecer la formación profesional en la **Universidad Nacional de Córdoba** dentro de la alianza con **Amazon Web Services**.
 
 ---
 
@@ -967,6 +1162,8 @@ Estado: **en curso / documentación parcial**. Se prevé narrar despliegue con m
 13. Galin, D. *Software Quality Assurance* (referencia de calidad de software).
 14. Solicitud de Proyecto Integrador — documento de presentación del trabajo final (UNC, 2025). Versión en Markdown del repositorio: [Solicitud-tema-PI.docx.md](../../../Solicitud-tema-PI.docx.md).
 15. HashiCorp. *Terragrunt Documentation*. [https://terragrunt.gruntwork.io/](https://terragrunt.gruntwork.io/)
-16. Amazon Web Services. *VPC User Guide*, *IAM User Guide*, *Elastic Load Balancing*, *CloudWatch*, *Secrets Manager* — documentación oficial consolidada por servicio.
+16. Amazon Web Services. *VPC User Guide*, *IAM User Guide*, *Amazon EKS User Guide*, *Secrets Manager* — documentación oficial consolidada por servicio.
+17. Apache JMeter Project. *Apache JMeter*. Documentación oficial.
+18. Informes finales de laboratorios 1–4 — repositorio del PI (`repositories/labs/`).
 
 *(Ampliar con referencias exactas de libros por edición y año según norma que defina la facultad.)*
