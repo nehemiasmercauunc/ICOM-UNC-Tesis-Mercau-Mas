@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Terragrunt 1.x only creates the S3 state bucket when backend bootstrap runs (see
+# remote_state docs). That is enabled by `terragrunt run --backend-bootstrap` or the
+# equivalent env var for that run.
+#
+# This script sets TG_BACKEND_BOOTSTRAP only for the child process (not your shell),
+# so plain `tg plan` / `tg --non-interactive apply` behave like always passing the flag.
+set -euo pipefail
+exec env TG_BACKEND_BOOTSTRAP=true "${TERRAGRUNT:-terragrunt}" "$@"
