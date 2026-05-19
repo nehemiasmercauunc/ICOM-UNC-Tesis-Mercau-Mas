@@ -1,0 +1,42 @@
+# kube-prometheus-stack values – entorno de laboratorio
+# Optimizado para nodos t3.small: sin PVCs, réplicas mínimas.
+
+grafana:
+  persistence:
+    enabled: false
+  service:
+    type: ClusterIP
+  # adminPassword se inyecta via set_sensitive en Terraform
+  defaultDashboardsEnabled: true
+  defaultDashboardsTimezone: America/Argentina/Cordoba
+
+prometheus:
+  prometheusSpec:
+    retention: 1d
+    storageSpec: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        memory: 512Mi
+
+alertmanager:
+  alertmanagerSpec:
+    storage: {}
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+
+nodeExporter:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true
+
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi

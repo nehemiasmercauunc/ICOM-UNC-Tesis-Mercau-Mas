@@ -1,9 +1,9 @@
 locals {
   account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl"))
 
-  environment  = local.account_vars.locals.environment
-  aws_region   = local.account_vars.locals.aws_region
-  state_bucket = local.account_vars.locals.state_bucket
+  environment    = local.account_vars.locals.environment
+  aws_region     = local.account_vars.locals.aws_region
+  state_bucket   = local.account_vars.locals.state_bucket
   aws_account_id = local.account_vars.locals.aws_account_id
 
   aws_profile          = get_env("AWS_PROFILE", "default")
@@ -15,7 +15,7 @@ remote_state {
 
   config = {
     bucket       = local.state_bucket
-    key          = "${path_relative_to_include()}/terraform.tfstate"
+    key          = "lab4/${path_relative_to_include()}/terraform.tfstate"
     region       = local.aws_region
     encrypt      = true
     use_lockfile = true
@@ -59,7 +59,7 @@ provider "aws" {
     tags = {
       Environment = "${local.environment}"
       ManagedBy   = "Terragrunt"
-      Lab         = "lab3"
+      Lab         = "lab4"
     }
   }
 }

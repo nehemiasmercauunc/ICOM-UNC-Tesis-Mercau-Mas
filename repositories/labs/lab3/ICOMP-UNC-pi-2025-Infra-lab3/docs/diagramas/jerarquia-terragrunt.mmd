@@ -1,0 +1,35 @@
+flowchart TB
+  root["live/root.hcl"]
+  devAcc["live/dev/account.hcl"]
+  prdAcc["live/prd/account.hcl"]
+
+  subgraph devRegion ["live/dev/us-east-1"]
+    devVpc["vpc/terragrunt.hcl"]
+    devEcr["ecr/terragrunt.hcl"]
+    devEks["eks/terragrunt.hcl"]
+    devEks -->|"dependency vpc"| devVpc
+  end
+
+  subgraph prdRegion ["live/prd/us-east-1"]
+    prdVpc["vpc/terragrunt.hcl"]
+    prdEcr["ecr/terragrunt.hcl"]
+    prdEks["eks/terragrunt.hcl"]
+    prdEks -->|"dependency vpc"| prdVpc
+  end
+
+  subgraph modules ["modules/"]
+    modVpc["vpc/"]
+    modEcr["ecr/"]
+    modEks["eks/"]
+  end
+
+  root --> devAcc
+  root --> prdAcc
+  devAcc --> devRegion
+  prdAcc --> prdRegion
+  devVpc --> modVpc
+  devEcr --> modEcr
+  devEks --> modEks
+  prdVpc --> modVpc
+  prdEcr --> modEcr
+  prdEks --> modEks

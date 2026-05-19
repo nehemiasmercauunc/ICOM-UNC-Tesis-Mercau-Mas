@@ -1,0 +1,27 @@
+sequenceDiagram
+  participant Op as Operador
+  participant TG as Terragrunt
+  participant TF as Terraform
+  participant S3 as S3 estado
+  participant AWS as AWS API
+
+  Op->>TG: bootstrap backend
+  TG->>S3: crear bucket si no existe
+  Op->>TG: run --all init
+  TG->>S3: configurar backend por unidad
+
+  Op->>TG: plan/apply vpc
+  TG->>TF: ejecutar en live/.../vpc
+  TF->>S3: leer/escribir state vpc
+  TF->>AWS: crear VPC subnets NAT IGW
+
+  Op->>TG: plan/apply ecr
+  TG->>TF: ejecutar en live/.../ecr
+  TF->>S3: leer/escribir state ecr
+  TF->>AWS: crear o importar repos ECR
+
+  Op->>TG: plan/apply eks
+  TG->>TF: leer outputs vpc via dependency
+  TG->>TF: ejecutar en live/.../eks
+  TF->>S3: leer/escribir state eks
+  TF->>AWS: crear cluster y node group

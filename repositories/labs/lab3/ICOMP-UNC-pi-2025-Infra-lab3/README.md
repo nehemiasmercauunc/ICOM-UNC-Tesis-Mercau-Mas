@@ -2,7 +2,15 @@
 
 Base de infraestructura como codigo para los entornos `dev` y `prd` en `us-east-1`.
 
-Marco conceptual para el informe (roles de cada componente y diagrama): [docs/marco-conceptual-lab3.md](docs/marco-conceptual-lab3.md).
+## Documentacion pedagogica
+
+| Documento | Descripcion |
+|-----------|-------------|
+| [docs/guia-y-consignas-lab3.md](docs/guia-y-consignas-lab3.md) | Guia de trabajo y consignas para alumnos |
+| [docs/entregables-lab3.md](docs/entregables-lab3.md) | Entregables obligatorios y criterios de aceptacion |
+| [docs/informe-final-lab3.md](docs/informe-final-lab3.md) | Informe final: implementacion paso a paso, decisiones y marco teorico |
+| [docs/marco-conceptual-lab3.md](docs/marco-conceptual-lab3.md) | Marco conceptual y diagrama de arquitectura |
+| [docs/diagramas/](docs/diagramas/) | Diagramas Mermaid reutilizables (arquitectura, red, secuencia, estado) |
 
 ## Estructura
 

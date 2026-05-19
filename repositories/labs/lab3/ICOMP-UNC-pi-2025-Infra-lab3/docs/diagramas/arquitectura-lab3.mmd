@@ -1,0 +1,37 @@
+flowchart TB
+  subgraph operators ["Operador o CI/CD"]
+    TG[Terragrunt]
+    TF[Terraform u OpenTofu]
+    TG --> TF
+  end
+
+  subgraph account ["Cuenta AWS us-east-1"]
+    S3Estado["S3 estado IaC"]
+    ECR[ECR]
+
+    subgraph vpcBlock [VPC - 2 AZ]
+      subgraph pubNet ["Subredes publicas"]
+        NAT[NAT Gateway]
+        IGW[Internet Gateway]
+        NAT --> IGW
+      end
+      subgraph privNet ["Subredes privadas"]
+        EKS[EKS managed nodes]
+      end
+      privNet --> NAT
+      pubNet --> IGW
+    end
+  end
+
+  subgraph envs ["Entornos"]
+    DEV[dev]
+    PRD[prd]
+  end
+
+  operators -->|"lectura y escritura de estado"| S3Estado
+  TF -->|"define recursos"| vpcBlock
+  TF -->|"define recursos"| ECR
+  TF -->|"define recursos"| EKS
+  ECR -.->|"pull de imagenes"| EKS
+  DEV -.-> account
+  PRD -.-> account

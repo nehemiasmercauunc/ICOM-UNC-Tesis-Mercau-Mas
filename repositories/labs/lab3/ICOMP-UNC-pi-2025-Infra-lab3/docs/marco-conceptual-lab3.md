@@ -20,7 +20,7 @@ El estado no vive solo en la máquina del desarrollador: se persiste en un **buc
 
 ## VPC (red)
 
-Una **VPC** es una red virtual aislada dentro de la cuenta, con un rango de direcciones (**CIDR**) propio. En este lab hay al menos una **subred pública** y una **privada** (en el despliegue de ejemplo, una zona de disponibilidad).
+Una **VPC** es una red virtual aislada dentro de la cuenta, con un rango de direcciones (**CIDR**) propio. En este lab hay **subredes públicas y privadas en al menos dos zonas de disponibilidad** (`us-east-1a` y `us-east-1b`), requisito de EKS para alta disponibilidad del plano de datos.
 
 - La subred **pública** concentra recursos que necesitan ruta directa hacia Internet, en particular el **NAT Gateway** (y la asociación con la **tabla de rutas** correspondiente).
 - La subred **privada** aloja cargas que no deben exponer IPs públicas (por ejemplo nodos de EKS). El tráfico saliente hacia Internet sale por el **NAT**, de modo que los workloads privados no reciben tráfico entrante arbitrario desde Internet por esa vía.
@@ -111,4 +111,12 @@ flowchart TB
   ECR -.->|"pull de imagenes"| EKS
 ```
 
-Para el documento final de la tesis podés exportar el diagrama desde cualquier visor Mermaid o capturar la figura desde GitHub / el IDE si renderiza Markdown.
+Para el documento final de la tesis podés exportar el diagrama desde cualquier visor Mermaid o capturar la figura desde GitHub / el IDE si renderiza Markdown. Diagramas adicionales en [diagramas/](diagramas/).
+
+## Documentación del laboratorio
+
+| Documento | Uso |
+|-----------|-----|
+| [guia-y-consignas-lab3.md](guia-y-consignas-lab3.md) | Guía de trabajo y consignas para alumnos |
+| [entregables-lab3.md](entregables-lab3.md) | Definición formal de entregables y criterios de aceptación |
+| [informe-final-lab3.md](informe-final-lab3.md) | Informe final: implementación paso a paso, decisiones y marco teórico ampliado |

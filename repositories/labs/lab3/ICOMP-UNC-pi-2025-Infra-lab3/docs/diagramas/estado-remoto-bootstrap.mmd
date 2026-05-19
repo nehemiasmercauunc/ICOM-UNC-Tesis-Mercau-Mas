@@ -1,0 +1,20 @@
+flowchart LR
+  Op[Operador]
+  TG[Terragrunt]
+  Bootstrap["TG_BACKEND_BOOTSTRAP o bin/tg"]
+  S3Bucket["Bucket S3 terraform-state-env-account"]
+  StateVpc["Key live/dev/us-east-1/vpc/terraform.tfstate"]
+  StateEcr["Key live/dev/us-east-1/ecr/terraform.tfstate"]
+  StateEks["Key live/dev/us-east-1/eks/terraform.tfstate"]
+  Lock["Lockfile S3 use_lockfile"]
+
+  Op --> Bootstrap
+  Bootstrap --> TG
+  TG -->|"crea bucket si falta"| S3Bucket
+  TG --> StateVpc
+  TG --> StateEcr
+  TG --> StateEks
+  StateVpc --> S3Bucket
+  StateEcr --> S3Bucket
+  StateEks --> S3Bucket
+  Lock --> S3Bucket
